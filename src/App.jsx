@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 // ???
 import messages from "./lib/messages";
+import StyledBox from "../component/StyledBox";
 
 // App 컴포넌트
 function App() {
@@ -22,6 +23,7 @@ function App() {
 
   return (
     <div className="flex flex-col justify-center items-center h-screen gap-4">
+     
       <h1 className="font-bold text-7xl">FORIF-REACT-2024</h1>
 
       <p className="text-xl">이번 프로젝트 화이팅!</p>
