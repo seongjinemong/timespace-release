@@ -7,7 +7,6 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 // ???
 import messages from "./lib/messages";
-import StyledBox from "../component/StyledBox";
 
 // App 컴포넌트
 function App() {
