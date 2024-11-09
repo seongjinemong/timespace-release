@@ -1,3 +1,4 @@
+/*
 // Imports
 // 리엑트
 import { useState } from "react";
@@ -18,29 +19,32 @@ function App() {
 
       <h1 className="font-bold text-7xl">FORIF-REACT-2024</h1>
 
-      {/* 기본 버튼 */}
-      <TimespaceButton
-        label="기본 버튼"
-        onClick={() => alert('Basic Button Clicked')}
-        styleType="timespace"
-        style={{ marginBottom: '200px' }}
-      />
-
-      {/* 이중 테두리 스타일 버튼 */}
-      <TimespaceButton
-        label="이중 테두리 버튼"
-        onClick={() => alert('Double Border Button Clicked')}
-        styleType="timespace2"
-      />
-
-      {/* Danger 스타일 버튼 */}
-      <TimespaceButton
-        label="Danger 버튼"
-        onClick={() => alert('Danger Button Clicked')}
-        styleType="timespace3"
-      />
+      
       
     </div>
+  );
+}
+
+export default App;
+*/
+// src/App.jsx
+import React from 'react';
+import Header from './pages/profile/Header.jsx';
+import Schedule from './pages/profile/Schedule.jsx';
+import Friends from './pages/profile/Friend.jsx';
+import Footer from './pages/profile/Footer.jsx';
+import './pages/profile/Style.css';
+
+function App() {
+  return (
+    <>
+      <Header />
+      <main>
+        <Schedule />
+        <Friends />
+      </main>
+      <Footer />
+    </>
   );
 }
 
