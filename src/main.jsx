@@ -4,9 +4,6 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./index.css";
 import App from "./App.jsx";
 import Mypage from "./pages/Mypage.jsx";
-import Friend from "./pages/Friend.jsx";
-import Timetable from "./pages/Timetable.jsx";
-import Group from "./pages/Group.jsx";
 
 // 토스트 알림 띄우기 위해 쓰는 라이브러리
 import { ToastContainer, Slide } from "react-toastify";
@@ -20,18 +17,6 @@ const router = createBrowserRouter([
   {
     path: "/mypage",
     element: <Mypage />,
-  },
-  {
-    path: "/friend",
-    element: <Friend />,
-  },
-  {
-    path: "/timetable",
-    element: <Timetable />,
-  },
-  {
-    path: "/group",
-    element: <Group />,
   },
 ]);
 createRoot(document.getElementById("root")).render(
