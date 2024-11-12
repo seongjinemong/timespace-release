@@ -5,7 +5,7 @@ import { GoogleLogin, GoogleOAuthProvider } from "@react-oauth/google";
 //import { useAuthStore } from "../lib/store";
 
 // GoogleAuth 컴포넌트
-const GoogleAuth = () => {
+const GoogleAuth = ({ onLoginSuccess }) => {
   // .env에서 구글 클라이언트 ID 받기
   const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 
@@ -21,6 +21,7 @@ const GoogleAuth = () => {
           console.log(credentialResponse);
           // 받은 정보를 저장소에 저장
           //setCredentials(credentialResponse);
+          onLoginSuccess(credentialResponse);
         }}
         // 실패시
         onError={() => {

@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import GoogleAuth from "../../components/GoogleAuth";
+import axios from "axios";
 import "../../App.css";
 import { toast } from "react-toastify";
 import Logo from "../../assets/Logo.png";
@@ -7,9 +8,21 @@ import Logo from "../../assets/Logo.png";
 export default function Landing() {
   const navigate = useNavigate();
 
-  const handleLoginSuccess = () => {
-    toast.success("Login successful!");
-    navigate("/timetable"); // timetable 페이지로 이동
+  const handleLoginSuccess = async (credentialResponse) => {
+    const res = await axios.post(
+      "https://timetableapi.seongjinemong.app/user/login",
+      credentialResponse,
+      {
+        withCredentials: true,
+      }
+    );
+
+    if (res.status === 200) {
+      toast.success("Login successful!");
+      navigate("/timetable"); // timetable 페이지로 이동
+    } else {
+      toast.error("Login failed!");
+    }
   };
 
   return (
