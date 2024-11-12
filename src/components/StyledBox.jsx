@@ -1,9 +1,9 @@
 import React from 'react';
 
-const StyledBox = () => {
+const StyledBox = ({ children }) => {
   return (
     <div style={styles.box}>
-      {/* 여기에 콘텐츠 추가 가능 */}
+      {children}
     </div>
   );
 };
