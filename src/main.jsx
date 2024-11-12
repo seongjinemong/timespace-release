@@ -8,10 +8,16 @@ import Easteregg from "./pages/Easteregg.jsx";
 import { ToastContainer, Slide } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
+import ProfilePage from "./pages/profile/ProfilePage.jsx";
+
 const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
+  },
+  {
+    path: "/profile",
+    element: <ProfilePage />,
   },
   {
     path: "/easteregg",
