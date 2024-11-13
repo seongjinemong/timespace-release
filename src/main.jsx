@@ -9,6 +9,7 @@ import { ToastContainer, Slide } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 import ProfilePage from "./pages/profile/ProfilePage.jsx";
+import Mypage from "./pages/mypage/MyPage.jsx";
 
 const router = createBrowserRouter([
   {
@@ -18,6 +19,10 @@ const router = createBrowserRouter([
   {
     path: "/profile",
     element: <ProfilePage />,
+  },
+  {
+    path: "/mypage",
+    element: <Mypage />,
   },
   {
     path: "/easteregg",
