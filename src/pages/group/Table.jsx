@@ -6,20 +6,16 @@ const days = ["월", "화", "수", "목", "금", "토", "일"];
 
 const TimeTable = ({ timeTableData, Edit }) => {
   return (
-    <div style={{ width: "80%", margin: "auto", marginTop: "50px" }}>
-      <h2 style={{ textAlign: "center" }}>강의시간표</h2>
-      <table style={{ width: "100%", borderCollapse: "collapse" }}>
+    <div className="bg-white min-h-screen flex flex-col items-center py-10">
+      <h2 className="text-black text-2xl font-bold mb-6">강의시간표</h2>
+      <table className="table-fixed border-collapse w-full max-w-5xl text-black">
         <thead>
           <tr>
-            <th style={{ border: "1px solid #ddd", padding: "8px" }}>시간</th>
+            <th className="border border-black px-4 py-2 w-1/8">시간</th>
             {days.map((day) => (
               <th
                 key={day}
-                style={{
-                  border: "1px solid #ddd",
-                  padding: "8px",
-                  textAlign: "center",
-                }}
+                className="border border-black px-4 py-2 text-center w-1/8"
               >
                 {day}
               </th>
@@ -29,13 +25,7 @@ const TimeTable = ({ timeTableData, Edit }) => {
         <tbody>
           {hourData.map((time) => (
             <tr key={time}>
-              <td
-                style={{
-                  border: "1px solid #ddd",
-                  padding: "8px",
-                  textAlign: "center",
-                }}
-              >{`${time}:00-${time + 1}:00`}</td>
+              <td className="border border-black px-4 py-2 text-center">{`${time}:00-${time + 1}:00`}</td>
               <TimeTableRow timeNum={time} timeTableData={timeTableData} Edit={Edit} />
             </tr>
           ))}
