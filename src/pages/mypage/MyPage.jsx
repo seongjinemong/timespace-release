@@ -66,7 +66,7 @@ import { jwtDecode } from "jwt-decode";
 // import { useAuthStore } from "../lib/store";
 import { useEffect, useState } from "react";
 // import customAaxios from "../lib/axios";
-import StyledBox from "../components/StyledBox";
+import Navigation from "../../components/Navigation";
 export default function Mypage() {
   //const credentials = useAuthStore((state) => state.credentials);
   const credentials = {
@@ -96,37 +96,48 @@ export default function Mypage() {
     fetchProfile();
   }, [credentials]);
   return (
-    <div className="flex flex-col items-center gap-8 p-6 text-black">
-      {/* 내 신상정보 */}
-      <div className="p-4 shadow-md rounded-lg bg-white w-full max-w-md">
-        <div className="text-lg font-bold mb-2">내 신상정보</div>
-        {info ? (
-          <>
-            <div className="mb-1">
-              <strong>이름:</strong> {info.name}
-            </div>
-            <div>
-              <strong>이메일:</strong> {info.email}
-            </div>
-          </>
-        ) : (
-          <div>Not Logged In</div>
-        )}
-      </div>
-      {/* 통계 */}
-      <div className="p-4 shadow-md rounded-lg bg-white w-full max-w-md">
-        <div className="text-lg font-bold mb-2">통계</div>
-        <div className="grid grid-cols-2 gap-4">
-          <div className="p-4 text-center shadow-sm rounded-lg border">
-            <div className="text-sm">내가 속한 그룹 수</div>
-            <div className="text-2xl font-bold">{groupCount}</div>
+    <div className="w-full min-h-screen">
+      <Navigation />
+      <div className="flex flex-col items-center gap-8 p-6 text-seagull-950">
+        {/* 내 신상정보 */}
+        <div className="p-8 rounded-lg bg-white w-full max-w-2xl border-2 border-seagull-900 shadow-[0_8px_0_theme(colors.seagull.900)] min-h-[200px]">
+          <div className="text-2xl font-bold mb-6 text-seagull-900">
+            내 신상정보
           </div>
-          <div className="p-4 text-center shadow-sm rounded-lg border">
-            <div className="text-sm">회원가입한 날짜</div>
-            <div className="text-2xl font-bold">{joinedDate}</div>
+          {info ? (
+            <>
+              <div className="mb-4 text-lg text-seagull-900">
+                <strong>이름:</strong> {info.name}
+              </div>
+              <div className="text-lg text-seagull-900">
+                <strong>이메일:</strong> {info.email}
+              </div>
+            </>
+          ) : (
+            <div className="text-seagull-900">Not Logged In</div>
+          )}
+        </div>
+  
+        {/* 통계 */}
+        <div className="p-8 rounded-lg bg-white w-full max-w-2xl border-2 border-seagull-900 shadow-[0_8px_0_theme(colors.seagull.900)] min-h-[250px]">
+          <div className="text-2xl font-bold mb-6 text-seagull-900">통계</div>
+          <div className="grid grid-cols-2 gap-8">
+            <div className="p-6 text-center rounded-lg bg-white border-2 border-seagull-900 shadow-[0_4px_0_theme(colors.seagull.900)] min-h-[150px]">
+              <div className="text-lg text-seagull-900 mb-4">
+                내가 속한 그룹 수
+              </div>
+              <div className="text-4xl font-bold text-seagull-900">
+                {groupCount}
+              </div>
+            </div>
+            <div className="p-6 text-center rounded-lg bg-white border-2 border-seagull-900 shadow-[0_4px_0_theme(colors.seagull.900)] min-h-[150px]">
+              <div className="text-lg text-seagull-900 mb-4">회원가입한 날짜</div>
+              <div className="text-4xl font-bold text-seagull-900">
+                {joinedDate}
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </div>
-  );
-}
+  );}
