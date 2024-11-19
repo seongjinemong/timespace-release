@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 import React from "react";
 import TimeTable from "./pages/group/Table";
 import processData from "./pages/group/processData";
@@ -51,6 +52,12 @@ const result = processData(timeTableData2);
 
 function App() {
   return <TimeTable timeTableData={result} />;
+=======
+import TimeTable from "./pages/timetable/TimeTable";
+
+export default function App() {
+  return <TimeTable />;
+>>>>>>> Stashed changes
 }
 
 export default App;
