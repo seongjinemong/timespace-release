@@ -12,10 +12,12 @@
   "dependencies": {
     "@react-oauth/google": "^0.12.1",
     "axios": "^1.7.7",
+    "cheerio": "^1.0.0",
     "dotenv": "^16.4.5",
     "jwt-decode": "^4.0.0",
     "react": "file:",
     "react-dom": "^18.3.1",
+    "react-icons": "^5.3.0",
     "react-router-dom": "^6.27.0",
     "react-toastify": "^10.0.5",
     "zustand": "^5.0.0-rc.2"
