@@ -10,11 +10,13 @@ import "react-toastify/dist/ReactToastify.css";
 
 import ProfilePage from "./pages/profile/ProfilePage.jsx";
 import Mypage from "./pages/mypage/MyPage.jsx";
+import Test from "./pages/test/Test.jsx";
+import Landing from "./pages/landing/Landing.jsx";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <App />,
+    element: <Landing />,
   },
   {
     path: "/profile",
@@ -27,6 +29,10 @@ const router = createBrowserRouter([
   {
     path: "/easteregg",
     element: <Easteregg />,
+  },
+  {
+    path: "/test",
+    element: <Test />,
   },
 ]);
 
