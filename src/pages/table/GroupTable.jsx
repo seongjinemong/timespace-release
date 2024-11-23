@@ -1,6 +1,6 @@
 import React from "react";
-import TimeTableRow from "./TableRow";
-import Chip from "../../components/chipButton/Chip"; // Import the Chip component
+import TimeTableRow from "./GroupTableRow";
+import Chip from "../../components/Chip"; // Import the Chip component
 
 const hourData = Array.from({ length: 11 }, (_, j) => j + 9); // 9~19시
 const days = ["월", "화", "수", "목", "금", "토", "일"];
