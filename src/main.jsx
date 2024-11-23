@@ -8,13 +8,18 @@ import { ToastContainer, Slide } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 import Landing from "./pages/landing/Landing.jsx";
-import GroupPage from "./pages/group/GroupPages.jsx"
-import TimeTable from "./pages/timetable/TimeTable.jsx";
+import GroupPage from "./pages/group/GroupPages.jsx";
+import Mypage from "./pages/mypage/MyPage.jsx";
+
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <Landing />,
+  },
+  {
+    path: "/mypage",
+    element: <Mypage />,
   },
   {
     path: "/group",

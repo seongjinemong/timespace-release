@@ -8,7 +8,7 @@ const days = ["월", "화", "수", "목", "금", "토", "일"];
 
 const TimeTable = ({ timeTableData, Edit }) => {
   return (
-    <div className="bg-white flex flex-col items-center py-4 h-full p-4 border-4 border-gray-300">
+    <div>
       {/* 상단바 */}
       <div className="flex items-center justify-between w-full max-w-5xl mb-4 px-4">
         <h2 className="text-black text-2xl font-bold flex items-center space-x-2">
@@ -45,7 +45,7 @@ const TimeTable = ({ timeTableData, Edit }) => {
               {days.map((day) => (
                 <th
                   key={day}
-                  className="border border-black px-4 py-2 text-center w-1/8"
+                  className="border border-black px-2 py-1 text-center w-1/8"
                 >
                   {day}
                 </th>
@@ -55,7 +55,7 @@ const TimeTable = ({ timeTableData, Edit }) => {
           <tbody>
             {hourData.map((time) => (
               <tr key={time}>
-                <td className="border border-black px-4 py-2 text-center">{`${time}:00-${time + 1}:00`}</td>
+                <td className="border border-black px-2 py-1 text-center">{`${time}:00-${time + 1}:00`}</td>
                 <TimeTableRow
                   timeNum={time}
                   timeTableData={timeTableData}

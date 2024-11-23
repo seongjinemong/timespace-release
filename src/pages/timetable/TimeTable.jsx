@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { TbTrash } from "react-icons/tb"; // 쓰레기통 아이콘
-import ShadowBox from "./TimeTableComponents/ShadowBox";  // 테두리
+import ShadowBox from "../../components/ShadowBox";  // 테두리
 import LinkInputModal from "./TimeTableComponents/LinkInputModal";  //  에타 링크 입력 모달 (미완)
 import DirectAddModal from "./TimeTableComponents/DirectAddModal";  // 직접 추가 모달
 import useTimetableEdit from "./TimeTableFunction/useTimetableEdit";  // 삭제 모드 by 쓰레기통 아이콘

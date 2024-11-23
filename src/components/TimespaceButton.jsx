@@ -38,7 +38,7 @@ const TimespaceButton = ({ label, onClick, styleType = 'timespace' }) => {
 
   return (
     <button className={buttonClass} onClick={onClick}>
-      <span>{label}</span>
+      <h>{label}</h>
     </button>
   );
 };

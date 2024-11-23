@@ -1,19 +1,16 @@
 import { useState } from "react";
+import TimespaceButton from "../../components/TimespaceButton";
+import ShadowBox from "../../components/ShadowBox";
 
 const FriendsList = () => {
   const [searchTerm, setSearchTerm] = useState("");
+  const [selectedFriends, setSelectedFriends] = useState([]);
   const allFriends = [
     "조성진",
     "홍성문",
     "박현수",
     "김다연",
     "박정호",
-    "이송희",
-    "이경민",
-    "김수정",
-    "유지훈",
-    "최지영",
-    "정예림",
   ];
 
   // 검색어에 따라 친구 필터링
@@ -21,57 +18,50 @@ const FriendsList = () => {
     friend.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  // 체크박스 상태 변경 핸들러
+  const handleCheckboxChange = (name) => {
+    setSelectedFriends((prevSelectedFriends) =>
+      prevSelectedFriends.includes(name)
+        ? prevSelectedFriends.filter((friend) => friend !== name) // 체크 해제
+        : [...prevSelectedFriends, name] // 체크 추가
+    );
+  };
+
   return (
-    <div className="relative h-[842px]">
+    <div>
       {/* Background border */}
-      <div className="absolute top-[11px] left-0 right-0 h-[831px] bg-[#254D64] rounded-[20px]" />
-
-      {/* Main content */}
-      <div className="relative h-[831px] bg-white border-[3px] border-[#254D64] rounded-[20px] p-4">
-        <div className="flex flex-col h-full">
-          <h2 className="text-xl font-bold text-black mb-4">친구</h2>
-
-          {/* Search Box */}
-          <div className="mb-6">
-            <input
-              type="text"
-              placeholder="검색"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full h-[67px] px-5 text-2xl border-[3px] border-[#254D64] rounded-[10px] text-black"
-            />
-          </div>
-
-          {/* Friends List with Scroll */}
-          <div className="flex-1 overflow-y-auto max-h-[550px]"> {/* max-h 추가하여 최대 높이 설정 */}
-            {filteredFriends.map((name, index) => (
-              <div key={name} className="relative">
-                <div className="py-4 text-2xl text-black">{name}</div>
-                {index !== filteredFriends.length - 1 && (
-                  <div className="absolute bottom-0 left-0 right-0 border-b-[3px] border-[#254D64]" />
-                )}
-              </div>
-            ))}
-            {filteredFriends.length === 0 && (
-              <div className="text-center text-gray-500 mt-4">
-                검색 결과가 없습니다.
-              </div>
-            )}
-          </div>
-
-          {/* Bottom Actions */}
-          <div className="flex gap-4">
-            <div className="flex-1">
-              <input
-                type="text"
-                placeholder="친구 추가"
-                className="w-full h-[67px] px-5 text-2xl border-[3px] border-[#254D64] rounded-[10px] text-black/30"
-              />
-            </div>
-            <button className="w-[117px] h-[67px] border-[3px] border-[#254D64] rounded-[10px] text-2xl text-[#254D64]">
-              추가
+      <div className="flex flex-col">
+        {/* Bottom Actions */}
+        <div className="flex items-center justify-center m-3">
+          <ShadowBox>
+            <button>
+              그룹에 친구추가
             </button>
-          </div>
+          </ShadowBox>
+        </div>
+
+        {/* Friends List with Scroll */}
+        <div className="flex-1 overflow-y-auto" style={{ maxHeight: "calc(100vh - 180px)" }}>
+          {filteredFriends.map((name, index) => (
+            <div key={name} className="relative flex items-center justify-center py-4 text-2xl text-black">
+              {/* 체크박스 */}
+              <input
+                type="checkbox"
+                className="w-6 h-6 mr-2"  // 체크박스 크기 조정과 오른쪽 마진 추가
+                checked={selectedFriends.includes(name)}
+                onChange={() => handleCheckboxChange(name)}
+              />
+              <div className="flex items-center justify-center">{name}</div> {/* 이름 */}
+              {index !== filteredFriends.length - 1 && (
+                <div className="absolute bottom-0 left-0 right-0 border-b-[3px] border-[#254D64]" />
+              )}
+            </div>
+          ))}
+          {filteredFriends.length === 0 && (
+            <div className="text-center text-gray-500 mt-4">
+              검색 결과가 없습니다.
+            </div>
+          )}
         </div>
       </div>
     </div>

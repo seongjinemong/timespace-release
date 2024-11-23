@@ -5,12 +5,9 @@ const GroupTab = () => {
   ];
 
   return (
-    <div className="relative h-[108px]">
-      {/* Background border - positioned slightly lower */}
-      <div className="absolute top-[11px] left-0 right-0 h-[97px] bg-[#254D64] rounded-[20px]" />
-
+    <div className="w-full">
       {/* Main content with border */}
-      <div className="relative h-[97px] bg-white border-[3px] border-[#254D64] rounded-[20px] px-8">
+      <nav className="w-full px-6 py-4 flex justify-between items-center">
         <div className="flex items-center h-full gap-4">
           <span className="text-2xl font-bold">그룹</span>
           <div className="flex gap-4">
@@ -29,7 +26,7 @@ const GroupTab = () => {
             ))}
           </div>
         </div>
-      </div>
+      </nav>
     </div>
   );
 };

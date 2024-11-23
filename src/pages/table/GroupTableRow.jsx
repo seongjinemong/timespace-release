@@ -50,7 +50,7 @@ function TimeTableRow({ timeNum, timeTableData }) {
           <td
             key={idx}
             rowSpan={data.rowSpan}
-            className="border border-black px-6 py-4 text-center relative"
+            className="border border-black px-3 py-4 text-center relative"
             style={{
               backgroundColor: getBackgroundColor(data.count),
               boxShadow: data.count > 0 ? "inset 0 0 0 2px #22C55E" : "none", // 내부 초록색 테두리
