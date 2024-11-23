@@ -7,7 +7,7 @@ import Navigation from "../../components/Navigation"; // Navigation 컴포넌트
 import ShadowBox from "../../components/ShadowBox";
 
 const timeTableData2 = {
-  A: {
+  조성진: {
     월: [{ name: "Math", start: 9, end: 11 }],
     화: [{ name: "English", start: 10, end: 12 }],
     수: [{ name: "Physics", start: 13, end: 15 }],
@@ -16,7 +16,7 @@ const timeTableData2 = {
     토: [{ name: "History", start: 11, end: 12 }],
     일: [{ name: "Literature", start: 10, end: 11 }],
   },
-  B: {
+  박정호: {
     월: [{ name: "Physics", start: 9, end: 10 }],
     화: [{ name: "Biology", start: 11, end: 13 }],
     수: [{ name: "History", start: 10, end: 11 }],
@@ -25,7 +25,7 @@ const timeTableData2 = {
     토: [{ name: "English", start: 10, end: 12 }],
     일: [{ name: "Philosophy", start: 13, end: 14 }],
   },
-  C: {
+  김다연: {
     월: [{ name: "Chemistry", start: 10, end: 11 }],
     화: [{ name: "History", start: 10, end: 11 }],
     수: [{ name: "Math", start: 9, end: 10 }],
