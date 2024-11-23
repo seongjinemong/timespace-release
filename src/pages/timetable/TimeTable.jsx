@@ -6,7 +6,19 @@ import DirectAddModal from "./TimeTableComponents/DirectAddModal";  // 직접 �
 import useTimetableEdit from "./TimeTableFunction/useTimetableEdit";  // 삭제 모드 by 쓰레기통 아이콘
 
 const days = ["월", "화", "수", "목", "금", "토", "일"];
-const timeLabels = Array.from({ length: 10 }, (_, i) => `${9 + i}:00`); // 09:00~18:00
+const timeLabels = [
+  "09:00 ~ 10:00",
+  "10:00 ~ 11:00",
+  "11:00 ~ 12:00",
+  "12:00 ~ 13:00",
+  "13:00 ~ 14:00",
+  "14:00 ~ 15:00",
+  "15:00 ~ 16:00",
+  "16:00 ~ 17:00",
+  "17:00 ~ 18:00",
+  "18:00 ~ 19:00",
+];
+
 
 const Timetable = () => {
   // 삭제 모드
@@ -93,12 +105,15 @@ const Timetable = () => {
             {timeLabels.map((time) => (
               <div
                 key={time}
-                className="relative flex items-center border-b border-gray-300 text-black font-medium bg-gray-100"
-                style={{ height: "46px" }}
+                className="relative flex items-center border-b border-gray-300 text-black bg-gray-200"
+                style={{ height: "46px", fontSize: "12px" }} // 폰트 크기 조정 및 배경색 설정
               >
                 <div
                   className="absolute left-0 w-[100px] h-full flex items-center justify-center"
-                  style={{ borderRight: "1px solid #ccc" }}
+                  style={{
+                    borderRight: "1px solid #ccc",
+                    backgroundColor: "#f3f3f3", // 추가로 회색 강조
+                  }}
                 >
                   {time}
                 </div>

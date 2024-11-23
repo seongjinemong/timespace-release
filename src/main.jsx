@@ -11,6 +11,7 @@ import Landing from "./pages/landing/Landing.jsx";
 import GroupPage from "./pages/group/GroupPages.jsx";
 import Mypage from "./pages/mypage/MyPage.jsx";
 
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -22,9 +23,12 @@ const router = createBrowserRouter([
   },
   {
     path: "/group",
-    element: <GroupPage/>,
+    element: <GroupPage />,
   },
-
+  {
+    path: "/t",
+    element: <TimeTable />,
+  }
 ]);
 
 createRoot(document.getElementById("root")).render(
