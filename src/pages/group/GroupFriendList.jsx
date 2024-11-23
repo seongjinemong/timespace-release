@@ -9,6 +9,11 @@ const FriendsList = () => {
     "김다연",
     "박정호",
     "이송희",
+    "이경민",
+    "김수정",
+    "유지훈",
+    "최지영",
+    "정예림",
   ];
 
   // 검색어에 따라 친구 필터링
@@ -37,8 +42,8 @@ const FriendsList = () => {
             />
           </div>
 
-          {/* Friends List */}
-          <div className="flex-1">
+          {/* Friends List with Scroll */}
+          <div className="flex-1 overflow-y-auto max-h-[550px]"> {/* max-h 추가하여 최대 높이 설정 */}
             {filteredFriends.map((name, index) => (
               <div key={name} className="relative">
                 <div className="py-4 text-2xl text-black">{name}</div>
