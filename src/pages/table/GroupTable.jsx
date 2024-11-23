@@ -8,7 +8,7 @@ const days = ["월", "화", "수", "목", "금", "토", "일"];
 
 const TimeTable = ({ timeTableData, Edit }) => {
   return (
-    <div className="bg-white flex flex-col items-center py-4 h-full p-4 border-4 border-gray-300">
+    <div>
       {/* 상단바 */}
       <div className="flex items-center justify-between w-full max-w-5xl mb-4 px-4">
         <h2 className="text-black text-2xl font-bold flex items-center space-x-2">

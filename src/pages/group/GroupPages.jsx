@@ -2,9 +2,9 @@ import React from "react";
 import TimeTable from "../table/GroupTable";
 import processData from "./processData";
 import GroupFriendList from "./GroupFriendList";
-import GroupList from "../../components/GroupTab";
+import GroupTab from "../../components/GroupTab";
 import Navigation from "../../components/Navigation"; // Navigation 컴포넌트 불러오기
-
+import ShadowBox from "../../components/ShadowBox";
 
 const timeTableData2 = {
   A: {
@@ -42,28 +42,38 @@ const GroupPage = () => {
   return (
     <div className="flex flex-col h-screen overflow-y-auto" >
       {/* 상단 네비게이션 바 */}
-      <Navigation />
+      <div className="m-3">  
+        <ShadowBox>
+          <Navigation />
+        </ShadowBox>
+      </div>
 
       {/* 콘텐츠 영역 */}
       <div className="flex flex-1 flex-col">
         {/* 첫 번째 콘텐츠 영역: 왼쪽 (TimeTable) */}
         <div className="flex-1 flex">
-          <div className="w-[70%] border-4 border-white bg-white ">
-            <TimeTable timeTableData={result} />
+          <div className="w-[70%] border-4 border-white bg-white m-2">  
+            <ShadowBox>
+              <TimeTable timeTableData={result} />
+            </ShadowBox>
           </div>
-
           {/* 오른쪽: FriendTable */}
-          <div className="w-[30%] border-4 border-white bg-white ">
-            <GroupFriendList />
+          <div className="w-[30%] border-4 border-white bg-white m-2">
+            <ShadowBox>
+              <GroupFriendList />
+            </ShadowBox>
           </div>
         </div>
       </div>
 
-      <GroupList />
-
-      <footer className="w-full bg-white text-black flex items-center justify-center"
-        style={{ height: "80%" }}>
-        <p className="text-sm">© 2024 Your Company</p>
+      <div className="m-3 ">  
+        <ShadowBox>
+          <GroupTab />
+        </ShadowBox>  
+      </div>
+      
+      <footer className="w-full"
+        style={{ height: "90%" }}>
       </footer>
     </div>
   );
