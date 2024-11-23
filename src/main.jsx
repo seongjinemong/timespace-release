@@ -12,11 +12,12 @@ import ProfilePage from "./pages/profile/ProfilePage.jsx";
 import Mypage from "./pages/mypage/MyPage.jsx";
 import Test from "./pages/test/Test.jsx";
 import Landing from "./pages/landing/Landing.jsx";
+import GroupPage from "./pages/group/GroupPages.jsx";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Landing />,
+    element: <App />,
   },
   {
     path: "/profile",
@@ -31,9 +32,10 @@ const router = createBrowserRouter([
     element: <Easteregg />,
   },
   {
-    path: "/test",
-    element: <Test />,
+    path: "/group",
+    element: <GroupPage />,
   },
+
 ]);
 
 createRoot(document.getElementById("root")).render(
