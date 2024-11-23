@@ -9,6 +9,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 import Landing from "./pages/landing/Landing.jsx";
 import GroupPage from "./pages/group/GroupPages.jsx"
+import TimeTable from "./pages/timetable/TimeTable.jsx";
 
 const router = createBrowserRouter([
   {
@@ -17,9 +18,12 @@ const router = createBrowserRouter([
   },
   {
     path: "/group",
-    element: <GroupPage/>,
+    element: <GroupPage />,
   },
-
+  {
+    path: "/t",
+    element: <TimeTable />,
+  }
 ]);
 
 createRoot(document.getElementById("root")).render(
