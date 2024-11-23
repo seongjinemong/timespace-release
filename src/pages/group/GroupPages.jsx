@@ -1,9 +1,8 @@
 import React from "react";
-import TimeTable from "./Table";
+import TimeTable from "../table/GroupTable";
 import processData from "./processData";
-import FriendList from "../profile/components/FriendList";
 import GroupFriendList from "./GroupFriendList";
-import GroupList from "../profile/components/GroupTab";
+import GroupList from "../../components/GroupTab";
 import Navigation from "../../components/Navigation"; // Navigation 컴포넌트 불러오기
 
 
