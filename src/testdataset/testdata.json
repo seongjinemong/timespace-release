@@ -1,0 +1,97 @@
+{
+    "timeTable": {
+      "조성진": {
+        "월": [{"name": "Math", "start": 9, "end": 11}],
+        "화": [{"name": "English", "start": 10, "end": 12}],
+        "수": [{"name": "Physics", "start": 13, "end": 15}],
+        "목": [{"name": "Chemistry", "start": 9, "end": 10}],
+        "금": [{"name": "Biology", "start": 14, "end": 16}],
+        "토": [{"name": "History", "start": 11, "end": 12}],
+        "일": [{"name": "Literature", "start": 10, "end": 11}]
+      },
+      "박정호": {
+        "월": [{"name": "Physics", "start": 9, "end": 10}],
+        "화": [{"name": "Biology", "start": 11, "end": 13}],
+        "수": [{"name": "History", "start": 10, "end": 11}],
+        "목": [{"name": "Math", "start": 14, "end": 15}],
+        "금": [{"name": "Chemistry", "start": 9, "end": 11}],
+        "토": [{"name": "English", "start": 10, "end": 12}],
+        "일": [{"name": "Philosophy", "start": 13, "end": 14}]
+      },
+      "김다연": {
+        "월": [{"name": "Chemistry", "start": 10, "end": 11}],
+        "화": [{"name": "History", "start": 10, "end": 11}],
+        "수": [{"name": "Math", "start": 9, "end": 10}],
+        "목": [{"name": "Literature", "start": 11, "end": 12}],
+        "금": [{"name": "Philosophy", "start": 10, "end": 11}],
+        "토": [{"name": "Biology", "start": 14, "end": 16}],
+        "일": [{"name": "English", "start": 9, "end": 10}]
+      },
+      "홍성문": {
+        "월": [{"name": "Geography", "start": 9, "end": 10}],
+        "화": [{"name": "Computer Science", "start": 11, "end": 13}],
+        "수": [{"name": "History", "start": 14, "end": 16}],
+        "목": [{"name": "Math", "start": 9, "end": 10}],
+        "금": [{"name": "Biology", "start": 14, "end": 16}],
+        "토": [{"name": "Literature", "start": 11, "end": 12}],
+        "일": [{"name": "Philosophy", "start": 10, "end": 11}]
+      },
+      "박현수": {
+        "월": [{"name": "Physics", "start": 9, "end": 11}],
+        "화": [{"name": "Literature", "start": 10, "end": 12}],
+        "수": [{"name": "Geography", "start": 14, "end": 16}],
+        "목": [{"name": "Chemistry", "start": 9, "end": 10}],
+        "금": [{"name": "Biology", "start": 14, "end": 16}],
+        "토": [{"name": "History", "start": 10, "end": 12}],
+        "일": [{"name": "Philosophy", "start": 13, "end": 14}]
+      },
+      "이송희": {
+        "월": [{"name": "Math", "start": 9, "end": 10}],
+        "화": [{"name": "English", "start": 10, "end": 12}],
+        "수": [{"name": "Physics", "start": 14, "end": 16}],
+        "목": [{"name": "Literature", "start": 9, "end": 11}],
+        "금": [{"name": "Chemistry", "start": 14, "end": 16}],
+        "토": [{"name": "History", "start": 11, "end": 12}],
+        "일": [{"name": "Philosophy", "start": 10, "end": 11}]
+      },
+      "김지원": {
+        "월": [{"name": "Math", "start": 9, "end": 10}],
+        "화": [{"name": "English", "start": 10, "end": 12}],
+        "수": [{"name": "Physics", "start": 13, "end": 15}],
+        "목": [{"name": "Chemistry", "start": 9, "end": 10}],
+        "금": [{"name": "Biology", "start": 14, "end": 16}],
+        "토": [{"name": "History", "start": 11, "end": 12}],
+        "일": [{"name": "Literature", "start": 10, "end": 11}]
+      },
+      "이민하": {
+        "월": [{"name": "Math", "start": 9, "end": 11}],
+        "화": [{"name": "English", "start": 10, "end": 12}],
+        "수": [{"name": "History", "start": 13, "end": 15}],
+        "목": [{"name": "Literature", "start": 9, "end": 11}],
+        "금": [{"name": "Chemistry", "start": 14, "end": 16}],
+        "토": [{"name": "History", "start": 11, "end": 12}],
+        "일": [{"name": "Biology", "start": 10, "end": 11}]
+      },
+      "박민혁": {
+        "월": [{"name": "Geography", "start": 9, "end": 10}],
+        "화": [{"name": "Math", "start": 10, "end": 12}],
+        "수": [{"name": "Physics", "start": 13, "end": 15}],
+        "목": [{"name": "Literature", "start": 9, "end": 11}],
+        "금": [{"name": "Chemistry", "start": 14, "end": 16}],
+        "토": [{"name": "History", "start": 11, "end": 12}],
+        "일": [{"name": "Biology", "start": 10, "end": 11}]
+      }
+    },
+    "groups": {
+      "포리프": {
+        "members": ["조성진", "박정호", "홍성문", "박현수"]
+      },
+      "리엑트 스터디": {
+        "members": ["조성진", "김다연", "이송희", "김지원"]
+      },
+      "웹 개발": {
+        "members": ["이민하", "박민혁", "김다연", "박정호"]
+      }
+    }
+  }
+  

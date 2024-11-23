@@ -6,19 +6,20 @@ const hourData = Array.from({ length: 11 }, (_, j) => j + 9); // 9~19시
 const days = ["월", "화", "수", "목", "금", "토", "일"];
 
 
-const TimeTable = ({ timeTableData, Edit }) => {
+const TimeTable = ({ timeTableData, groupName, Edit }) => {
   return (
     <div>
       {/* 상단바 */}
       <div className="flex items-center justify-between w-full max-w-5xl mb-4 px-4">
         <h2 className="text-black text-2xl font-bold flex items-center space-x-2">
-          <span>강의시간표</span>
+          <span>{groupName}</span>
           {/* 공유하기 이모티콘 추가 */}
           <button className="text-2xl cursor-pointer">
             📤 {/* 공유하기 이모티콘 */}
           </button>
         </h2>
 
+        {/*
         <div className="flex space-x-4">
           <Chip
             isSelected={true}  // Dynamically control this state based on your needs
@@ -33,6 +34,7 @@ const TimeTable = ({ timeTableData, Edit }) => {
             }}
           />
         </div>
+        */}
       </div>
 
 
@@ -55,7 +57,7 @@ const TimeTable = ({ timeTableData, Edit }) => {
           <tbody>
             {hourData.map((time) => (
               <tr key={time}>
-                <td className="border border-black px-2 py-1 text-center">{`${time}:00-${time + 1}:00`}</td>
+                <td className="border border-black px-2 py-1 text-center">{`${time}:00 - ${time + 1}:00`}</td>
                 <TimeTableRow
                   timeNum={time}
                   timeTableData={timeTableData}
