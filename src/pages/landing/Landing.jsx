@@ -10,7 +10,7 @@ export default function Landing() {
 
   const handleLoginSuccess = async (credentialResponse) => {
     const res = await axios.post(
-      "https://timetableapi.seongjinemong.app/user/login",
+      "import.meta.env.VITE_SERVER_URL + “/user/profile”",
       credentialResponse,
       {
         withCredentials: true,
@@ -64,7 +64,9 @@ export default function Landing() {
                 </div>
               </div>
               <div className="text-center">
-                <div className="text-4xl font-bold text-seagull-900">실시간</div>
+                <div className="text-4xl font-bold text-seagull-900">
+                  실시간
+                </div>
                 <div className="text-lg font-semibold text-seagull-800 mt-2">
                   일정 비교
                 </div>
