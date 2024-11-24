@@ -2,21 +2,9 @@ import { useState } from "react";
 import TimespaceButton from "../../components/TimespaceButton";
 import ShadowBox from "../../components/ShadowBox";
 
-const FriendsList = () => {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [selectedFriends, setSelectedFriends] = useState([]);
-  const allFriends = [
-    "조성진",
-    "홍성문",
-    "박현수",
-    "김다연",
-    "박정호",
-  ];
+const FriendsList = ({ members }) => {
 
-  // 검색어에 따라 친구 필터링
-  const filteredFriends = allFriends.filter((friend) =>
-    friend.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const [selectedFriends, setSelectedFriends] = useState([]);
 
   // 체크박스 상태 변경 핸들러
   const handleCheckboxChange = (name) => {
@@ -42,7 +30,7 @@ const FriendsList = () => {
 
         {/* Friends List with Scroll */}
         <div className="flex-1 overflow-y-auto" style={{ maxHeight: "calc(100vh - 180px)" }}>
-          {filteredFriends.map((name, index) => (
+          {members.map((name, index) => (
             <div key={name} className="relative flex items-center justify-center py-4 text-2xl text-black">
               {/* 체크박스 */}
               <input
@@ -52,12 +40,12 @@ const FriendsList = () => {
                 onChange={() => handleCheckboxChange(name)}
               />
               <div className="flex items-center justify-center">{name}</div> {/* 이름 */}
-              {index !== filteredFriends.length - 1 && (
+              {index !== members.length - 1 && (
                 <div className="absolute bottom-0 left-0 right-0 border-b-[3px] border-[#254D64]" />
               )}
             </div>
           ))}
-          {filteredFriends.length === 0 && (
+          {members.length === 0 && (
             <div className="text-center text-gray-500 mt-4">
               검색 결과가 없습니다.
             </div>
