@@ -9,8 +9,9 @@ export default function Landing() {
   const navigate = useNavigate();
 
   const handleLoginSuccess = async (credentialResponse) => {
+    console.log(import.meta.env.VITE_SERVER_URL + "/user/login");
     const res = await axios.post(
-      "import.meta.env.VITE_SERVER_URL + “/user/profile”",
+      import.meta.env.VITE_SERVER_URL + "/user/login",
       credentialResponse,
       {
         withCredentials: true,
@@ -18,6 +19,7 @@ export default function Landing() {
     );
 
     if (res.status === 200) {
+      localStorage.setItem("Credential", credentialResponse.credential);
       toast.success("Login successful!");
       navigate("/timetable");
     } else {

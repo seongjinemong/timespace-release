@@ -67,18 +67,29 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import Navigation from "../../components/Navigation";
 import { useNavigate } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
 
 export default function Mypage() {
   const navigate = useNavigate();
   const [userInfo, setUserInfo] = useState(null); // 사용자 정보 상태
-  const [groupCount, setGroupCount] = useState(13); // 기본값
-  const [joinedDate, setJoinedDate] = useState("2024-10-03"); // 기본값
+  const [groupCount, setGroupCount] = useState(0); // 기본값
+  const [createdAt, setCreatedAt] = useState("2024-10-03"); // 기본값
+  const [name, setName] = useState(""); // 기본값
 
   useEffect(() => {
     fetchProfile();
   }, []);
 
   const fetchProfile = async () => {
+    let info = null;
+    const credentials = localStorage.getItem("Credential");
+
+    console.log(credentials);
+    if (credentials) info = jwtDecode(credentials);
+
+    console.log(info);
+    setName(info.name);
+
     try {
       // API 요청 보내기
       const response = await axios.get(
@@ -92,8 +103,25 @@ export default function Mypage() {
       if (response.status === 200) {
         console.log("Profile Response:", response.data);
         setUserInfo(response.data); // 사용자 정보 저장
-        if (response.data.groupCount) setGroupCount(response.data.groupCount); // 그룹 수
-        if (response.data.joinedDate) setJoinedDate(response.data.joinedDate); // 가입 날짜
+        //if (response.data.groupCount) setGroupCount(response.data.groupCount); // 그룹 수
+        if (response.data.createdAt) {
+          const [date, time] = response.data.createdAt.split("T"); // "T"를 기준으로 문자열 나눔
+          console.log(date); // "2024-11-13"
+          console.log(time); // "13:01:25.426Z"
+          setCreatedAt(date);
+        } // 가입 날짜
+      }
+      const response2 = await axios.get(
+        `${import.meta.env.VITE_SERVER_URL}/group`, // 환경 변수 기반 URL
+        {
+          withCredentials: true, // 쿠키를 함께 전송
+        }
+      );
+
+      if (response.status === 200) {
+        console.log("Group Response:", response2.data);
+        setGroupCount(response2.data.length); // 사용자 정보 저장
+        //if (response.data.groupCount) setGroupCount(response.data.groupCount); // 그룹 수
       }
     } catch (error) {
       console.error("Profile error:", error);
@@ -116,7 +144,7 @@ export default function Mypage() {
           {userInfo ? (
             <>
               <div className="mb-4 text-lg text-seagull-900">
-                <strong>이름:</strong> {userInfo.name || "이름 없음"}
+                <strong>이름:</strong> {name || "이름 없음"}
               </div>
               <div className="text-lg text-seagull-900">
                 <strong>이메일:</strong> {userInfo.email || "이메일 없음"}
@@ -136,7 +164,7 @@ export default function Mypage() {
                 내가 속한 그룹 수
               </div>
               <div className="text-4xl font-bold text-seagull-900">
-                {userInfo.groupCount ? userInfo.groupCount : "Loading"}
+                {groupCount ? groupCount : "Loading"}
               </div>
             </div>
             <div className="p-6 text-center rounded-lg bg-white border-2 border-seagull-900 shadow-[0_4px_0_theme(colors.seagull.900)] min-h-[150px]">
@@ -144,7 +172,7 @@ export default function Mypage() {
                 회원가입한 날짜
               </div>
               <div className="text-4xl font-bold text-seagull-900">
-                {userInfo.createdAt ? userInfo.createdAt : "Loading"}
+                {createdAt ? createdAt : "Loading"}
               </div>
             </div>
           </div>
