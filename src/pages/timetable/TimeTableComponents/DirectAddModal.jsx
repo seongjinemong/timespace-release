@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import ShadowBox from "../../../components/ShadowBox";
 
 const days = ["월", "화", "수", "목", "금", "토", "일"];
@@ -19,7 +19,7 @@ const DirectAddModal = ({ isOpen, onClose, onAddSubject }) => {
   const [startTime, setStartTime] = useState("09:00");
   const [endTime, setEndTime] = useState("11:00");
 
-  // 모달이 열릴 때 상태를 초기화
+  // 모달 열릴 때마다 상태 초기화
   useEffect(() => {
     if (isOpen) {
       setName("");
@@ -44,7 +44,7 @@ const DirectAddModal = ({ isOpen, onClose, onAddSubject }) => {
   };
 
   const handleSubmit = () => {
-    const dayIndex = (days.indexOf(day) + 1) % days.length; // 요일을 하루 뒤로 이동
+    const dayIndex = (days.indexOf(day) + 1) % days.length; // 요일을 하루 뒤로 이동 for 칸 영역 맞추기 (고정 크기라..)
     const adjustedDay = days[dayIndex];
 
     const newSubject = {
@@ -122,7 +122,7 @@ const DirectAddModal = ({ isOpen, onClose, onAddSubject }) => {
             <ShadowBox width="w-auto" padding="">
               <button
                 onClick={handleSubmit}
-                className="px-4 py-2 bg-seagull-400 text-white font-semibold rounded-lg active:translate-y-1 active:shadow-none"
+                className="px-4 py-2  text-black font-semibold rounded-lg active:translate-y-1 active:shadow-none"
               >
                 추가
               </button>
