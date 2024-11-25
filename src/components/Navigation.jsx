@@ -6,8 +6,7 @@ const Navigation = () => {
       <nav className="w-full px-6 py-4 flex justify-between items-center">
         <Link
           to="/profile"
-          className="font-['Inter'] text-2xl font-bold text-seagull-950 cursor-pointer"
-        >
+          className="font-['Inter'] text-2xl font-bold text-seagull-950 cursor-pointer">
           시공간
         </Link>
 
