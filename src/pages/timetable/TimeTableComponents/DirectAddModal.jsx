@@ -44,7 +44,7 @@ const DirectAddModal = ({ isOpen, onClose, onAddSubject }) => {
   };
 
   const handleSubmit = () => {
-    const dayIndex = (days.indexOf(day) + 1) % days.length; // 요일을 하루 뒤로 이동 for 칸 영역 맞추기 (고정 크기라..)
+    const dayIndex = (days.indexOf(day) ) % days.length; // 요일을 하루 뒤로 이동 for 칸 영역 맞추기 (고정 크기라..)
     const adjustedDay = days[dayIndex];
 
     const newSubject = {
