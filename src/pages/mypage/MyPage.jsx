@@ -61,40 +61,77 @@
 //       </div>
 //     </>
 //   );
-// }
-import { jwtDecode } from "jwt-decode";
-// import { useAuthStore } from "../lib/store";
+//}
+
 import { useEffect, useState } from "react";
-// import customAaxios from "../lib/axios";
+import axios from "axios";
 import Navigation from "../../components/Navigation";
+import { useNavigate } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
+
 export default function Mypage() {
-  //const credentials = useAuthStore((state) => state.credentials);
-  const credentials = {
-    clientId:
-      "638172052069-mn73rt77rrbifi1nerhauor4goti4rqe.apps.googleusercontent.com",
+  const navigate = useNavigate();
+  const [userInfo, setUserInfo] = useState(null); // 사용자 정보 상태
+  const [groupCount, setGroupCount] = useState(0); // 기본값
+  const [createdAt, setCreatedAt] = useState("2024-10-03"); // 기본값
+  const [name, setName] = useState(""); // 기본값
 
-    credential:
-      "eyJhbGciOiJSUzI1NiIsImtpZCI6IjFkYzBmMTcyZThkNmVmMzgyZDZkM2EyMzFmNmMxOTdkZDY4Y2U1ZWYiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL2FjY291bnRzLmdvb2dsZS5jb20iLCJhenAiOiI2MzgxNzIwNTIwNjktbW43M3J0NzdycmJpZmkxbmVyaGF1b3I0Z290aTRycWUuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJhdWQiOiI2MzgxNzIwNTIwNjktbW43M3J0NzdycmJpZmkxbmVyaGF1b3I0Z290aTRycWUuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJzdWIiOiIxMTE5NzY5OTg4NjQyMzg0NTg5MzEiLCJlbWFpbCI6InNqMDExMjAyMjNAZ21haWwuY29tIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsIm5iZiI6MTczMTQwNjEyNywibmFtZSI6Iuy0iOy5mCIsInBpY3R1cmUiOiJodHRwczovL2xoMy5nb29nbGV1c2VyY29udGVudC5jb20vYS9BQ2c4b2NLX2dGUFQ0WHdyR0dUc1psVHNKbDgwUEJ5aURUTXJFUTlwNTFkLU9qeGN6aC1fWjBxSD1zOTYtYyIsImdpdmVuX25hbWUiOiLstIjsuZgiLCJpYXQiOjE3MzE0MDY0MjcsImV4cCI6MTczMTQxMDAyNywianRpIjoiYzQwMTJjODBiZWM1ZDJhYWRlNzJjYmVjNjk1YTM4MzhhYWFjYmUzNiJ9.FlxhfLdP6R9xcM1H3LmVYAihM9WDKVeTW2czLvyZNLD5nuT_M4WKEwfL8I-CQFhthGJ3MiUyVKOtXN5CUzZcdzSw1fRghhHa0FBt85W_nFcY62lp6ZduBgg_mRXyNDN-wEbgLv1LvxJ5u70boJl1sNe_xg0AzLcchl6AIVu9yVbXL0nC2bOP-flGi1-to_LRKsNN7MrBe4imz2B6uwUv7euz18r4MXgETDmeWPHJnp828egY6u56xhp-qBORLu8JTKx0z3G1cSP1zISAjdjhnDpVQJczPIcmLYXqOKYNz_MItAsShUamtXy_85hG5ToxLe_jFlQ0RnU5XdFkousc5A",
-
-    select_by: "btn",
-  };
-  let info = true;
-  if (credentials) info = jwtDecode(credentials.credential);
-  console.log(info);
-  const [profile, setProfile] = useState(null);
-  const [groupCount, setGroupCount] = useState(13); // 예시 데이터
-  const [joinedDate, setJoinedDate] = useState("2024-10-03"); // 예시 데이터
   useEffect(() => {
-    async function fetchProfile() {
-      if (credentials) {
-        // const res = await customAaxios.get("/user/profile", {
-        //   withCredentials: true,
-        // });
-        // setProfile(res.data);
+    fetchProfile();
+  }, []);
+
+  const fetchProfile = async () => {
+    let info = null;
+    const credentials = localStorage.getItem("Credential");
+
+    console.log(credentials);
+    if (credentials) info = jwtDecode(credentials);
+
+    console.log(info);
+    setName(info.name);
+
+    try {
+      // API 요청 보내기
+      const response = await axios.get(
+        `${import.meta.env.VITE_SERVER_URL}/user/profile`, // 환경 변수 기반 URL
+        {
+          withCredentials: true, // 쿠키를 함께 전송
+        }
+      );
+
+      // 성공적으로 응답 받았을 경우
+      if (response.status === 200) {
+        console.log("Profile Response:", response.data);
+        setUserInfo(response.data); // 사용자 정보 저장
+        //if (response.data.groupCount) setGroupCount(response.data.groupCount); // 그룹 수
+        if (response.data.createdAt) {
+          const [date, time] = response.data.createdAt.split("T"); // "T"를 기준으로 문자열 나눔
+          console.log(date); // "2024-11-13"
+          console.log(time); // "13:01:25.426Z"
+          setCreatedAt(date);
+        } // 가입 날짜
+      }
+      const response2 = await axios.get(
+        `${import.meta.env.VITE_SERVER_URL}/group`, // 환경 변수 기반 URL
+        {
+          withCredentials: true, // 쿠키를 함께 전송
+        }
+      );
+
+      if (response.status === 200) {
+        console.log("Group Response:", response2.data);
+        setGroupCount(response2.data.length); // 사용자 정보 저장
+        //if (response.data.groupCount) setGroupCount(response.data.groupCount); // 그룹 수
+      }
+    } catch (error) {
+      console.error("Profile error:", error);
+      // 인증 실패 시 로그인 페이지로 이동
+      if (error.response?.status === 401) {
+        navigate("/"); // 로그인 페이지로 리다이렉트
       }
     }
-    fetchProfile();
-  }, [credentials]);
+  };
+
   return (
     <div className="w-full min-h-screen">
       <Navigation />
@@ -104,20 +141,20 @@ export default function Mypage() {
           <div className="text-2xl font-bold mb-6 text-seagull-900">
             내 신상정보
           </div>
-          {info ? (
+          {userInfo ? (
             <>
               <div className="mb-4 text-lg text-seagull-900">
-                <strong>이름:</strong> {info.name}
+                <strong>이름:</strong> {name || "이름 없음"}
               </div>
               <div className="text-lg text-seagull-900">
-                <strong>이메일:</strong> {info.email}
+                <strong>이메일:</strong> {userInfo.email || "이메일 없음"}
               </div>
             </>
           ) : (
             <div className="text-seagull-900">Not Logged In</div>
           )}
         </div>
-  
+
         {/* 통계 */}
         <div className="p-8 rounded-lg bg-white w-full max-w-2xl border-2 border-seagull-900 shadow-[0_8px_0_theme(colors.seagull.900)] min-h-[250px]">
           <div className="text-2xl font-bold mb-6 text-seagull-900">통계</div>
@@ -127,17 +164,20 @@ export default function Mypage() {
                 내가 속한 그룹 수
               </div>
               <div className="text-4xl font-bold text-seagull-900">
-                {groupCount}
+                {groupCount ? groupCount : "Loading"}
               </div>
             </div>
             <div className="p-6 text-center rounded-lg bg-white border-2 border-seagull-900 shadow-[0_4px_0_theme(colors.seagull.900)] min-h-[150px]">
-              <div className="text-lg text-seagull-900 mb-4">회원가입한 날짜</div>
+              <div className="text-lg text-seagull-900 mb-4">
+                회원가입한 날짜
+              </div>
               <div className="text-4xl font-bold text-seagull-900">
-                {joinedDate}
+                {createdAt ? createdAt : "Loading"}
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-  );}
+  );
+}
