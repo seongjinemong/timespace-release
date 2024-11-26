@@ -44,8 +44,8 @@ const DirectAddModal = ({ isOpen, onClose, onAddSubject }) => {
   };
 
   const handleSubmit = () => {
-    const dayIndex = (days.indexOf(day) ) % days.length; // 요일을 하루 뒤로 이동 for 칸 영역 맞추기 (고정 크기라..)
-    const adjustedDay = days[dayIndex];
+    const dayIndex = (days.indexOf(day) ) % days.length;  // 요일 인덱스 보정
+    const adjustedDay = days[dayIndex];   
 
     const newSubject = {
       name,
@@ -55,7 +55,7 @@ const DirectAddModal = ({ isOpen, onClose, onAddSubject }) => {
       color: generateRandomColor(), // 랜덤 색상 추가
     };
 
-    onAddSubject(newSubject);
+    onAddSubject(newSubject);   
     onClose();
   };
 
@@ -80,7 +80,7 @@ const DirectAddModal = ({ isOpen, onClose, onAddSubject }) => {
               className="bg-white w-full p-2 border border-gray-300 rounded text-black"
             >
               {days.map((d) => (
-                <option key={d} value={d}>
+                <option key={d} value={d}>  
                   {d}
                 </option>
               ))}

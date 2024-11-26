@@ -30,32 +30,6 @@ const Timetable = () => {
   const [isDirectAddModalOpen, setDirectAddModalOpen] = useState(false);
   const [subjects, setSubjects] = useState([]);
 
-  // // 서버에 시간표 데이터 GET 요청
-  // const fetchTimetable = async () => {
-  //   try {
-  //     const res = await axios.get(
-  //       import.meta.env.VITE_SERVER_URL + "/timetable", 
-  //       { timetable: subjects },
-  //       {
-  //         withCredentials: true,
-  //       }
-  //     );
-  //     if (res.status === 200 && Array.isArray(res.data)) {
-  //       setSubjects(res.data);
-  //       toast.success("GET timetable successful!");
-  //     } else {
-  //       toast.error("GET failed!");
-  //     }
-  //   } catch (e) {
-  //     toast.error(e.message);
-  //   }
-  // };
-
-  // // 컴포넌트 렌더링 시 GET
-  // useEffect(() => {
-  //   fetchTimetable();
-  // }, []); // 빈 배열로 설정 -> 한 번만 실행
-
 
   const openDirectAddModal = () => setDirectAddModalOpen(true);
   const closeDirectAddModal = () => setDirectAddModalOpen(false);
@@ -68,6 +42,32 @@ const Timetable = () => {
   const deleteSubject = (index) => {
     setSubjects(subjects.filter((_, i) => i !== index));
   };
+
+  // 서버에 시간표 데이터 GET 요청
+  const fetchTimetable = async () => {
+    try {
+      const res = await axios.get(
+        import.meta.env.VITE_SERVER_URL + "/timetable", 
+        { timetable: subjects },
+        {
+          withCredentials: true,
+        }
+      );
+      if (res.status === 200) {
+        setSubjects(res.data);
+        toast.success("GET timetable successful!");
+      } else {
+        toast.error("GET failed!");
+      }
+    } catch (e) {
+      toast.error(e.message);
+    }
+  };
+
+  // 컴포넌트 렌더링 시 GET
+  useEffect(() => {
+    fetchTimetable();
+  }, []); // 빈 배열로 설정 -> 한 번만 실행
 
   // "저장" 버튼 핸들러
   const saveTimetable = async () => {
