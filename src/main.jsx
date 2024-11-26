@@ -26,11 +26,9 @@ const router = createBrowserRouter([
     element: <GroupPage />,
   },
   {
-
     path: "/timetable",
     element: <TimeTable />,
   }
-
     path: "/group/:name", // 새로운 라우트 추가
     element: <GroupPage />, // GroupPage에서 `name` 파라미터를 사용할 수 있도록 설정
   },
