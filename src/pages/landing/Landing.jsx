@@ -10,7 +10,7 @@ export default function Landing() {
 
   const handleLoginSuccess = async (credentialResponse) => {
     const res = await axios.post(
-      "https://timetableapi.seongjinemong.app/user/login",
+      import.meta.env.VITE_SERVER_URL + "/user/login",
       credentialResponse,
       {
         withCredentials: true,

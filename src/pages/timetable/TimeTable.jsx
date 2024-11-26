@@ -1,9 +1,11 @@
 import { useState } from "react";
 import { TbTrash } from "react-icons/tb"; // 쓰레기통 아이콘
-import ShadowBox from "../../components/ShadowBox";  // 테두리
-import LinkInputModal from "./TimeTableComponents/LinkInputModal";  //  에타 링크 입력 모달 (미완)
-import DirectAddModal from "./TimeTableComponents/DirectAddModal";  // 직접 추가 모달
-import useTimetableEdit from "./TimeTableFunction/useTimetableEdit";  // 삭제 모드 by 쓰레기통 아이콘
+import ShadowBox from "../../components/ShadowBox"; // 테두리
+import LinkInputModal from "./TimeTableComponents/LinkInputModal"; //  에타 링크 입력 모달 (미완)
+import DirectAddModal from "./TimeTableComponents/DirectAddModal"; // 직접 추가 모달
+import useTimetableEdit from "./TimeTableFunction/useTimetableEdit"; // 삭제 모드 by 쓰레기통 아이콘
+import axios from "axios";
+import { toast } from "react-toastify";
 
 import Navigation from "../../components/Navigation";
 
@@ -21,11 +23,9 @@ const timeLabels = [
   "18:00 ~ 19:00",
 ];
 
-
 const Timetable = () => {
   // 삭제 모드
   const { isEditMode, toggleEditMode, message } = useTimetableEdit();
-
 
   const [isLinkModalOpen, setLinkModalOpen] = useState(false);
   const [isDirectAddModalOpen, setDirectAddModalOpen] = useState(false);
@@ -46,29 +46,30 @@ const Timetable = () => {
   };
 
   // "저장" 버튼 핸들러
-  // const saveTimetable = async (credentialResponse) => {
-  //   credentialResponse,
-  //   {
-  //     withCredentials: true,
-  //   }
-  //   try {
-  //     const response = await axios.post("https://timetableapi.seongjinemong.app/timetable", { subjects });
-  //     console.log("Server response:", response.data);
-  //     alert("시간표가 성공적으로 저장되었습니다!");
-  //   } catch (error) {
-  //     console.error("Error saving timetable:", error);
-  //     alert("시간표 저장에 실패했습니다.");
-  //   }
-  // };
+  const saveTimetable = async () => {
+    try {
+      const res = await axios.post(
+        import.meta.env.VITE_SERVER_URL + "/timetable",
+        { timetable: subjects},
+        {
+          withCredentials: true,
+        }
+      );
+      if (res.status === 200) {
+        toast.success("POST timetable successful!");
+      } else {
+        toast.error("POST failed!");
+      }
+    } catch (e) {
+      toast.error(e.message);
+    }
+  };
 
   return (
     <div className="flex flex-col justify-center items-center min-h-screen space-y-4">
-
-
       <div className="w-4/5">
         <Navigation />
       </div>
-
 
       {/* 삭제 모드 메시지 */}
       {message && (
@@ -83,15 +84,18 @@ const Timetable = () => {
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-xl text-black font-bold">내 시간표</h2>
           <div className="flex items-center space-x-4">
-            <button onClick={toggleEditMode} className="text-gray-500 hover:text-red-700">
+            <button
+              onClick={toggleEditMode}
+              className="text-gray-500 hover:text-red-700"
+            >
               <TbTrash size={20} />
             </button>
 
             <ShadowBox width="w-auto" padding="p-0">
               <button
                 className="px-4 py-1 bg-white text-black font-semibold rounded-lg active:translate-y-1 active:shadow-none"
-              // onClick={saveTimetable} // "저장" 버튼 핸들러 연결
-              // 저장 누르면 ->  POST 로 서버에 시간표 저장 (미완)
+                onClick={saveTimetable} // "저장" 버튼 핸들러 연결
+                // 저장 누르면 ->  POST 로 서버에 시간표 저장 (미완)
               >
                 저장
               </button>
@@ -100,7 +104,10 @@ const Timetable = () => {
         </div>
 
         {/* 시간표 영역 */}
-        <div className="relative border border-gray-300 bg-white" style={{ width: "700px", height: "500px" }}>
+        <div
+          className="relative border border-gray-300 bg-white"
+          style={{ width: "700px", height: "500px" }}
+        >
           {/* 요일 */}
           <div className="absolute top-0 left-[100px] flex">
             {days.map((day) => (
@@ -122,13 +129,15 @@ const Timetable = () => {
               gridTemplateRows: `repeat(${timeLabels.length}, 46px)`,
             }}
           >
-            {Array.from({ length: days.length * timeLabels.length }).map((_, index) => (
-              <div
-                key={index}
-                className="border-b border-r border-gray-300"
-                style={{ height: "46px" }}
-              ></div>
-            ))}
+            {Array.from({ length: days.length * timeLabels.length }).map(
+              (_, index) => (
+                <div
+                  key={index}
+                  className="border-b border-r border-gray-300"
+                  style={{ height: "46px" }}
+                ></div>
+              )
+            )}
           </div>
 
           {/* 가로선과 시간 레이블 */}
@@ -154,8 +163,8 @@ const Timetable = () => {
 
           {/* 과목 데이터 */}
           {subjects.map((subject, index) => {
-            const startTop = (subject.startTime - 540) * 46 / 60; // 09:00 = 540분 기준
-            const height = (subject.endTime - subject.startTime) * 46 / 60;
+            const startTop = ((subject.startTime - 540) * 46) / 60; // 09:00 = 540분 기준
+            const height = ((subject.endTime - subject.startTime) * 46) / 60;
             const dayIndex = days.indexOf(subject.day);
 
             if (dayIndex === -1) return null;
@@ -176,7 +185,6 @@ const Timetable = () => {
               </div>
             );
           })}
-
         </div>
       </ShadowBox>
 
