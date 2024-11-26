@@ -1,12 +1,12 @@
 import React from "react";
-import ShadowBox from "./ShadowBox";
+import ShadowBox from "../../../components/ShadowBox";
 
 const LinkInputModal = ({ isOpen, onClose }) => {
   if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50"
-      style={{ zIndex: 50 }} // 모달을 최상단에 두기 위한 z-index 설정
+      style={{ zIndex: 50 }} // 모달을 항상 최상단에 두기 위한 z-index 설정
     >
       <ShadowBox width="w-800">
         <div className="relative bg-white w-[400px] p-4 rounded-lg shadow-lg">

@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { TbTrash } from "react-icons/tb"; // 쓰레기통 아이콘
 import ShadowBox from "../../components/ShadowBox";  // 테두리
 import LinkInputModal from "./TimeTableComponents/LinkInputModal";  //  에타 링크 입력 모달 (미완)
 import DirectAddModal from "./TimeTableComponents/DirectAddModal";  // 직접 추가 모달
 import useTimetableEdit from "./TimeTableFunction/useTimetableEdit";  // 삭제 모드 by 쓰레기통 아이콘
+
+import Navigation from "../../components/Navigation";
 
 const days = ["월", "화", "수", "목", "금", "토", "일"];
 const timeLabels = [
@@ -24,6 +26,7 @@ const Timetable = () => {
   // 삭제 모드
   const { isEditMode, toggleEditMode, message } = useTimetableEdit();
 
+
   const [isLinkModalOpen, setLinkModalOpen] = useState(false);
   const [isDirectAddModalOpen, setDirectAddModalOpen] = useState(false);
   const [subjects, setSubjects] = useState([]);
@@ -37,12 +40,36 @@ const Timetable = () => {
     setSubjects([...subjects, newSubject]);
   };
 
+  // 쓰레기통 icon 클릭 -> 과목 삭제 filter로 거르기
   const deleteSubject = (index) => {
     setSubjects(subjects.filter((_, i) => i !== index));
   };
 
+  // "저장" 버튼 핸들러
+  // const saveTimetable = async (credentialResponse) => {
+  //   credentialResponse,
+  //   {
+  //     withCredentials: true,
+  //   }
+  //   try {
+  //     const response = await axios.post("https://timetableapi.seongjinemong.app/timetable", { subjects });
+  //     console.log("Server response:", response.data);
+  //     alert("시간표가 성공적으로 저장되었습니다!");
+  //   } catch (error) {
+  //     console.error("Error saving timetable:", error);
+  //     alert("시간표 저장에 실패했습니다.");
+  //   }
+  // };
+
   return (
-    <div className="flex flex-col justify-center items-center min-h-screen bg-gray-200 space-y-4">
+    <div className="flex flex-col justify-center items-center min-h-screen space-y-4">
+
+
+      <div className="w-4/5">
+        <Navigation />
+      </div>
+
+
       {/* 삭제 모드 메시지 */}
       {message && (
         <div
@@ -61,7 +88,11 @@ const Timetable = () => {
             </button>
 
             <ShadowBox width="w-auto" padding="p-0">
-              <button className="px-4 py-1 bg-white text-black font-semibold rounded-lg active:translate-y-1 active:shadow-none">
+              <button
+                className="px-4 py-1 bg-white text-black font-semibold rounded-lg active:translate-y-1 active:shadow-none"
+              // onClick={saveTimetable} // "저장" 버튼 핸들러 연결
+              // 저장 누르면 ->  POST 로 서버에 시간표 저장 (미완)
+              >
                 저장
               </button>
             </ShadowBox>

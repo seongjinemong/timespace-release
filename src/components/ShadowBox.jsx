@@ -8,7 +8,7 @@ const ShadowBox = ({
 }) => {
   return (
     <div className={`relative ${width} ${className}`}>
-      <div className="absolute -inset-x-1 -top-1 -bottom-4 bg-seagull-500 rounded-lg shadow-lg"></div>
+      <div className="absolute -inset-x-1 -top-1 -bottom-2 bg-seagull-500 rounded-lg shadow-lg"></div>
       <div className={`relative bg-white rounded-lg ${padding}`}>
         {children}
       </div>

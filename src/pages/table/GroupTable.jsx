@@ -12,8 +12,28 @@ const GroupTable = ({ timeTableData, groupName, Edit }) => {
       <div className="flex items-center justify-between w-full max-w-5xl mb-4 px-4">
         <h2 className="text-black text-2xl font-bold flex items-center space-x-2">
           <span>{groupName}</span>
-          <button className="text-2xl cursor-pointer">📤</button>
+          {/* 공유하기 이모티콘 추가 */}
+          <button className="text-2xl cursor-pointer">
+            📤 {/* 공유하기 이모티콘 */}
+          </button>
         </h2>
+
+        {/*
+        <div className="flex space-x-4">
+          <Chip
+            isSelected={true}  // Dynamically control this state based on your needs
+            onClick={() => {
+              // Handle the click if necessary
+            }}
+          />
+          <Chip
+            isSelected={false}  // Dynamically control this state based on your needs
+            onClick={() => {
+              // Handle the click if necessary
+            }}
+          />
+        </div>
+        */}
       </div>
 
       {/* 시간표 테이블 */}
@@ -31,7 +51,11 @@ const GroupTable = ({ timeTableData, groupName, Edit }) => {
             {hourData.map((time) => (
               <tr key={time}>
                 <td className="border border-black px-2 py-1 text-center">{`${time}:00 - ${time + 1}:00`}</td>
-                <TimeTableRow timeNum={time} timeTableData={timeTableData} Edit={Edit} />
+                <TimeTableRow
+                  timeNum={time}
+                  timeTableData={timeTableData}
+                  Edit={Edit}
+                />
               </tr>
             ))}
           </tbody>
