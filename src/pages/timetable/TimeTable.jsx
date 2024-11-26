@@ -1,11 +1,13 @@
-import { useState } from "react";
-import { TbTrash } from "react-icons/tb"; // 쓰레기통 아이콘
-import ShadowBox from "../../components/ShadowBox";  // 테두리
-import LinkInputModal from "./TimeTableComponents/LinkInputModal";  //  에타 링크 입력 모달 (미완)
-import DirectAddModal from "./TimeTableComponents/DirectAddModal";  // 직접 추가 모달
-import useTimetableEdit from "./TimeTableFunction/useTimetableEdit";  // 삭제 모드 by 쓰레기통 아이콘
+import { useState, useEffect } from "react";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 import Navigation from "../../components/Navigation";
+import { TbTrash } from "react-icons/tb"; // 쓰레기통 아이콘
+
+import DirectAddModal from "./TimeTableComponents/DirectAddModal"; // 직접 추가 모달
+import ShadowBox from "../../components/ShadowBox"; // 테두리
+import useTimetableEdit from "./TimeTableFunction/useTimetableEdit"; // 삭제 모드 by 쓰레기통 아이콘
 
 const days = ["월", "화", "수", "목", "금", "토", "일"];
 const timeLabels = [
@@ -21,18 +23,14 @@ const timeLabels = [
   "18:00 ~ 19:00",
 ];
 
-
 const Timetable = () => {
   // 삭제 모드
   const { isEditMode, toggleEditMode, message } = useTimetableEdit();
 
-
-  const [isLinkModalOpen, setLinkModalOpen] = useState(false);
   const [isDirectAddModalOpen, setDirectAddModalOpen] = useState(false);
   const [subjects, setSubjects] = useState([]);
 
-  const openLinkModal = () => setLinkModalOpen(true);
-  const closeLinkModal = () => setLinkModalOpen(false);
+
   const openDirectAddModal = () => setDirectAddModalOpen(true);
   const closeDirectAddModal = () => setDirectAddModalOpen(false);
 
@@ -45,30 +43,57 @@ const Timetable = () => {
     setSubjects(subjects.filter((_, i) => i !== index));
   };
 
+  // 서버에 시간표 데이터 GET 요청
+  const fetchTimetable = async () => {
+    try {
+      const res = await axios.get(
+        import.meta.env.VITE_SERVER_URL + "/timetable", 
+        { timetable: subjects },
+        {
+          withCredentials: true,
+        }
+      );
+      if (res.status === 200) {
+        setSubjects(res.data);
+        toast.success("GET timetable successful!");
+      } else {
+        toast.error("GET failed!");
+      }
+    } catch (e) {
+      toast.error(e.message);
+    }
+  };
+
+  // 컴포넌트 렌더링 시 GET
+  useEffect(() => {
+    fetchTimetable();
+  }, []); // 빈 배열로 설정 -> 한 번만 실행
+
   // "저장" 버튼 핸들러
-  // const saveTimetable = async (credentialResponse) => {
-  //   credentialResponse,
-  //   {
-  //     withCredentials: true,
-  //   }
-  //   try {
-  //     const response = await axios.post("https://timetableapi.seongjinemong.app/timetable", { subjects });
-  //     console.log("Server response:", response.data);
-  //     alert("시간표가 성공적으로 저장되었습니다!");
-  //   } catch (error) {
-  //     console.error("Error saving timetable:", error);
-  //     alert("시간표 저장에 실패했습니다.");
-  //   }
-  // };
+  const saveTimetable = async () => {
+    try {
+      const res = await axios.post(
+        import.meta.env.VITE_SERVER_URL + "/timetable",
+        { timetable: subjects },
+        {
+          withCredentials: true,
+        }
+      );
+      if (res.status === 200) {
+        toast.success("POST timetable successful!");
+      } else {
+        toast.error("POST failed!");
+      }
+    } catch (e) {
+      toast.error(e.message);
+    }
+  };
 
   return (
-    <div className="flex flex-col justify-center items-center min-h-screen space-y-4">
-
-
-      <div className="w-4/5">
+    <div className="flex flex-col justify-center items-center min-h-screen space-y-4 transform -translate-y-4">
+      <div className="w-4/5 transform -translate-y-4">
         <Navigation />
       </div>
-
 
       {/* 삭제 모드 메시지 */}
       {message && (
@@ -80,18 +105,20 @@ const Timetable = () => {
       )}
 
       <ShadowBox width="w-3/4 max-w-4xl" padding="p-6">
-        <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xl text-black font-bold">내 시간표</h2>
+        <div className="flex justify-between items-center mb-2">
+          <h2 className="text-l text-black font-bold">내 시간표</h2>
           <div className="flex items-center space-x-4">
-            <button onClick={toggleEditMode} className="text-gray-500 hover:text-red-700">
+            <button
+              onClick={toggleEditMode}
+              className="text-gray-500 hover:text-red-700"
+            >
               <TbTrash size={20} />
             </button>
 
             <ShadowBox width="w-auto" padding="p-0">
               <button
                 className="px-4 py-1 bg-white text-black font-semibold rounded-lg active:translate-y-1 active:shadow-none"
-              // onClick={saveTimetable} // "저장" 버튼 핸들러 연결
-              // 저장 누르면 ->  POST 로 서버에 시간표 저장 (미완)
+                onClick={saveTimetable} // "저장" 버튼 -> POST
               >
                 저장
               </button>
@@ -100,7 +127,10 @@ const Timetable = () => {
         </div>
 
         {/* 시간표 영역 */}
-        <div className="relative border border-gray-300 bg-white" style={{ width: "700px", height: "500px" }}>
+        <div
+          className="relative border border-gray-300 bg-white"
+          style={{ width: "700px", height: "500px" }}
+        >
           {/* 요일 */}
           <div className="absolute top-0 left-[100px] flex">
             {days.map((day) => (
@@ -122,13 +152,15 @@ const Timetable = () => {
               gridTemplateRows: `repeat(${timeLabels.length}, 46px)`,
             }}
           >
-            {Array.from({ length: days.length * timeLabels.length }).map((_, index) => (
-              <div
-                key={index}
-                className="border-b border-r border-gray-300"
-                style={{ height: "46px" }}
-              ></div>
-            ))}
+            {Array.from({ length: days.length * timeLabels.length }).map(
+              (_, index) => (
+                <div
+                  key={index}
+                  className="border-b border-r border-gray-300"
+                  style={{ height: "46px" }}
+                ></div>
+              )
+            )}
           </div>
 
           {/* 가로선과 시간 레이블 */}
@@ -154,8 +186,8 @@ const Timetable = () => {
 
           {/* 과목 데이터 */}
           {subjects.map((subject, index) => {
-            const startTop = (subject.startTime - 540) * 46 / 60; // 09:00 = 540분 기준
-            const height = (subject.endTime - subject.startTime) * 46 / 60;
+            const startTop = ((subject.startTime - 540) * 46) / 60; // 09:00 = 540분 기준
+            const height = ((subject.endTime - subject.startTime) * 46) / 60;
             const dayIndex = days.indexOf(subject.day);
 
             if (dayIndex === -1) return null;
@@ -166,7 +198,7 @@ const Timetable = () => {
                 className={`absolute text-black text-sm rounded-lg flex justify-center items-center ${subject.color}`} // 색상 적용
                 style={{
                   top: `${startTop + 40}px`, // 상단 요일 헤더 높이 보정
-                  left: `${100 * dayIndex}px`,
+                  left: `${100 * dayIndex + 100}px`,
                   height: `${height}px`,
                   width: "100px",
                 }}
@@ -176,34 +208,24 @@ const Timetable = () => {
               </div>
             );
           })}
-
         </div>
       </ShadowBox>
 
       {/* 하단 버튼 */}
-      <ShadowBox width="w-auto" padding="p-4">
-        <div className="flex justify-center space-x-10">
-          <ShadowBox width="w-auto" padding="p-0">
-            <button
-              onClick={openLinkModal}
-              className="px-4 py-2 bg-white text-black font-semibold rounded-lg active:translate-y-1 active:shadow-none"
-            >
-              에타에서 가져오기
-            </button>
-          </ShadowBox>
+      <ShadowBox width="w-auto" padding="p-3">
+        <div className="flex justify-center space-x-10 transform -translate-y-1">
           <ShadowBox width="w-auto" padding="p-0">
             <button
               onClick={openDirectAddModal}
               className="px-4 py-2 bg-white text-black font-semibold rounded-lg active:translate-y-1 active:shadow-none"
             >
-              직접 추가
+              추가하기
             </button>
           </ShadowBox>
         </div>
       </ShadowBox>
 
       {/* 모달 컴포넌트 */}
-      <LinkInputModal isOpen={isLinkModalOpen} onClose={closeLinkModal} />
       <DirectAddModal
         isOpen={isDirectAddModalOpen}
         onClose={closeDirectAddModal}

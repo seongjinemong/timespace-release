@@ -9,8 +9,9 @@ export default function Landing() {
   const navigate = useNavigate();
 
   const handleLoginSuccess = async (credentialResponse) => {
+    console.log(import.meta.env.VITE_SERVER_URL + "/user/login");
     const res = await axios.post(
-      "https://timetableapi.seongjinemong.app/user/login",
+      import.meta.env.VITE_SERVER_URL + "/user/login",
       credentialResponse,
       {
         withCredentials: true,
@@ -18,6 +19,7 @@ export default function Landing() {
     );
 
     if (res.status === 200) {
+      localStorage.setItem("Credential", credentialResponse.credential);
       toast.success("Login successful!");
       navigate("/timetable");
     } else {
@@ -64,7 +66,9 @@ export default function Landing() {
                 </div>
               </div>
               <div className="text-center">
-                <div className="text-4xl font-bold text-seagull-900">실시간</div>
+                <div className="text-4xl font-bold text-seagull-900">
+                  실시간
+                </div>
                 <div className="text-lg font-semibold text-seagull-800 mt-2">
                   일정 비교
                 </div>
