@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import TimeTable from "../table/GroupTable";
 import timeTableData from "../../testdataset/testdata.json"; // JSON 파일 import
@@ -19,7 +19,6 @@ const GroupPage = () => {
       setGroupData(group);
     }
   }, [name]);
-
 
   // 멤버들의 시간표만 필터링하여 전달
   const filteredTimeTableData = {};
