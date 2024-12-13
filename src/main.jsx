@@ -12,6 +12,7 @@ import GroupPage from "./pages/group/GroupPages.jsx";
 import Mypage from "./pages/mypage/MyPage.jsx";
 import TimeTable from "./pages/timetable/TimeTable.jsx";
 import ProfilePage from "./pages/profile/ProfilePage.jsx";
+import ApiTest from "./pages/group/APITest.jsx";
 
 const router = createBrowserRouter([
   {
@@ -37,6 +38,10 @@ const router = createBrowserRouter([
   {
     path: "/group/:name", // 새로운 라우트 추가
     element: <GroupPage />, // GroupPage에서 `name` 파라미터를 사용할 수 있도록 설정
+  },
+  {
+    path: "/apitest/",
+    element: <ApiTest />,
   },
 ]);
 
