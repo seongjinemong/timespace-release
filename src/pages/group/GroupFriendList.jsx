@@ -1,45 +1,45 @@
-import { useState } from "react";
-import TimespaceButton from "../../components/TimespaceButton";
+import { useState, useEffect } from "react";
 import ShadowBox from "../../components/ShadowBox";
 
-const FriendsList = ({ members }) => {
+const FriendsList = ({ members, onSelect }) => {
+  const [selectedFriends, setSelectedFriends] = useState(members); // 초기값 설정
 
-  const [selectedFriends, setSelectedFriends] = useState([]);
+  useEffect(() => {
+    // members 변경 시 전체 선택 상태 초기화
+    setSelectedFriends(members);
+    onSelect(members); // 초기값을 상위 컴포넌트에 전달
+  }, [members]);
 
-  // 체크박스 상태 변경 핸들러
   const handleCheckboxChange = (name) => {
-    setSelectedFriends((prevSelectedFriends) =>
-      prevSelectedFriends.includes(name)
-        ? prevSelectedFriends.filter((friend) => friend !== name) // 체크 해제
-        : [...prevSelectedFriends, name] // 체크 추가
-    );
+    const updatedFriends = selectedFriends.includes(name)
+      ? selectedFriends.filter((friend) => friend !== name) // 체크 해제
+      : [...selectedFriends, name]; // 체크 추가
+
+    setSelectedFriends(updatedFriends);
+    onSelect(updatedFriends); // 상위 컴포넌트로 전달
   };
 
   return (
     <div>
-      {/* Background border */}
       <div className="flex flex-col">
-        {/* Bottom Actions */}
         <div className="flex items-center justify-center m-3">
           <ShadowBox>
-            <button>
-              그룹에 친구추가
-            </button>
+            <button>그룹에 친구추가</button>
           </ShadowBox>
         </div>
-
-        {/* Friends List with Scroll */}
-        <div className="flex-1 overflow-y-auto" style={{ maxHeight: "calc(100vh - 180px)" }}>
+        <div
+          className="flex-1 overflow-y-auto"
+          style={{ maxHeight: "calc(100vh - 180px)" }}
+        >
           {members.map((name, index) => (
-            <div key={name} className="relative flex items-center justify-center py-4 text-2xl text-black">
-              {/* 체크박스 */}
+            <div key={name} className="relative flex items-center py-4 text-2xl text-black">
               <input
                 type="checkbox"
-                className="w-6 h-6 mr-2"  // 체크박스 크기 조정과 오른쪽 마진 추가
+                className="w-6 h-6 mr-2"
                 checked={selectedFriends.includes(name)}
                 onChange={() => handleCheckboxChange(name)}
               />
-              <div className="flex items-center justify-center">{name}</div> {/* 이름 */}
+              <div>{name}</div>
               {index !== members.length - 1 && (
                 <div className="absolute bottom-0 left-0 right-0 border-b-[3px] border-[#254D64]" />
               )}

@@ -11,6 +11,7 @@ import ShadowBox from "../../components/ShadowBox";
 const GroupPage = () => {
   const { name } = useParams(); // 선택된 그룹 이름
   const [groupData, setGroupData] = useState(null);
+  const [selectedFriends, setSelectedFriends] = useState([]); // 선택된 멤버 상태
 
   useEffect(() => {
     // 선택된 그룹 데이터 가져오기
@@ -22,15 +23,14 @@ const GroupPage = () => {
 
   // 멤버들의 시간표만 필터링하여 전달
   const filteredTimeTableData = {};
-  if (groupData) {
-    const { members } = groupData; // 그룹 멤버들
-    members.forEach((member) => {
+  if (groupData && selectedFriends.length > 0) {
+    selectedFriends.forEach((member) => {
       filteredTimeTableData[member] = timeTableData.timeTable[member];
     });
   }
 
   // processData로 필터링된 데이터 처리
-  const result = processData(filteredTimeTableData);
+  const result = selectedFriends.length > 0 ? processData(filteredTimeTableData) : {}; // 선택된 멤버가 없으면 빈 데이터 반환
 
   return (
     <div className="flex flex-col h-screen overflow-y-auto">
@@ -54,19 +54,23 @@ const GroupPage = () => {
           {/* 오른쪽: FriendTable */}
           <div className="w-[30%] border-4 border-white bg-white m-2">
             <ShadowBox>
-              <GroupFriendList members={groupData ? groupData.members : []} />
+              <GroupFriendList 
+                members={groupData ? groupData.members : []} 
+                onSelect={setSelectedFriends} // 선택된 멤버 업데이트
+              />
             </ShadowBox>
           </div>
         </div>
       </div>
 
-      <div className="m-3">
+      <div className="m-3 pb-10">
         <ShadowBox>
           <GroupTab />
         </ShadowBox>
       </div>
 
-      <footer className="w-full" style={{ height: "90%" }}></footer>
+      <footer className="w-full" style={{ height: "90%" }}>
+      </footer>
     </div>
   );
 };
