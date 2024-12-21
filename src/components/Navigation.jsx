@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { useEffect } from "react";
 import { getUserInfo } from "../api/userApi";
 import { useAuthStore } from "../store/authStore";
+import {handleLogout} from "../hooks/useLogout";
 
 const Navigation = () => {
   const { isLoggedIn, userName, setCredentials } = useAuthStore();
@@ -23,11 +24,6 @@ const Navigation = () => {
     fetchUserInfo();
   }, [isLoggedIn, setCredentials]);
 
-  const handleLogout = () => {
-    localStorage.removeItem("Credential");
-    useAuthStore.getState().logout();
-    window.location.href = "/";
-  };
 
   return (
     <div className="w-full">
