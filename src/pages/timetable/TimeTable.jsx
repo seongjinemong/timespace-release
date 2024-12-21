@@ -169,7 +169,7 @@ const Timetable = () => {
             {timeLabels.map((time) => (
               <div
                 key={time}
-                className="relative flex items-center border-b border-gray-300 text-black bg-white-200 bg-gray-100"
+                className="relative flex items-center border-b border-gray-300 text-black bg-white"
                 style={{ height: "46px", fontSize: "12px" }} // 폰트 크기 조정 및 배경색 설정
               >
                 <div
