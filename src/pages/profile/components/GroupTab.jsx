@@ -1,14 +1,13 @@
-// src/components/GroupTab.jsx
 import { useState } from "react";
 import { useGroups } from "../../../hooks/useGroups";
-
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 export default function GroupTab() {
   const [newGroupName, setNewGroupName] = useState("");
   const { groups, activeGroup, loading, error, createGroup, selectGroup } =
     useGroups();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const handleCreateGroup = async () => {
     const success = await createGroup({ name: newGroupName });
@@ -21,6 +20,9 @@ export default function GroupTab() {
     selectGroup(groupId);
     navigate(`/group/${groupName}`);
   };
+
+  // Check if we're currently in a group page
+  const isInGroupPage = location.pathname.startsWith("/group/");
 
   return (
     <div className="relative h-[108px]">
@@ -39,7 +41,7 @@ export default function GroupTab() {
                     onClick={() => handleGroupClick(group.id, group.name)}
                     className={`h-[61px] px-4 border-[3px] border-[#254D64] rounded-[10px] text-base
                     ${
-                      group.id === activeGroup
+                      isInGroupPage && group.id === activeGroup
                         ? "bg-[#254D64] text-white"
                         : "bg-white text-black"
                     }`}
