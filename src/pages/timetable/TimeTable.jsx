@@ -74,14 +74,22 @@ const Timetable = () => {
   }, []); // 빈 배열로 설정 -> 한 번만 실행
 
   useEffect(() => {
-    console.log(
-      "width",
-      timetableParent.current ? timetableParent.current.offsetWidth : 0
-    );
-    console.log(timetableParent.current.getBoundingClientRect());
+    const handleResize = () => {
+      console.log(
+        "width",
+        timetableParent.current ? timetableParent.current.offsetWidth : 0
+      );
+      console.log(timetableParent.current.getBoundingClientRect());
+      setTimetableParentWidth(timetableParent.current.offsetWidth);
+    };
 
-    setTimetableParentWidth(timetableParent.current.offsetWidth);
-  }, [timetableParent.current]);
+    window.addEventListener("resize", handleResize);
+    handleResize(); // 컴포넌트가 마운트될 때 초기 width 설정
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []); // 빈 배열로 설정 -> 컴포넌트 마운트 시 한 번만 실행
 
   // "저장" 버튼 핸들러
   const saveTimetable = async () => {
@@ -138,11 +146,11 @@ const Timetable = () => {
 
         {/* 시간표 영역 */}
         <div
-          className="border border-gray-300 bg-white w-full h-[500px] flex flex-col"
-          ref={timetableParent} // 시간표 부모 요소
+          className="relative border border-gray-300 bg-white w-full h-[500px] flex flex-col"
+          // 시간표 부모 요소
         >
           {/* 요일 */}
-          <div className="flex">
+          <div className="flex" ref={timetableParent}>
             <div className="flex flex-1 h-[40px] items-center justify-center border-r border-gray-300 text-black font-semibold bg-gray-100">
               {""}
             </div>
@@ -191,8 +199,11 @@ const Timetable = () => {
                 key={index}
                 className={`absolute text-black text-sm flex justify-center items-center ${subject.color}`} // 색상 적용
                 style={{
-                  top: `${startTop + 120}px`, // 상단 요일 헤더 높이 보정
-                  left: `${(timetableParentWidth / 8) * dayIndex + 130}px`,
+                  top: `${startTop + 40}px`, // 상단 요일 헤더 높이 보정
+                  left: `${
+                    (timetableParentWidth / 8) * dayIndex +
+                    timetableParentWidth / 8
+                  }px`,
                   height: `${height}px`,
                   width: timetableParentWidth / 8,
                 }}
