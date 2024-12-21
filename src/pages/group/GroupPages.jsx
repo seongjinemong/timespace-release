@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import TimeTable from "../table/GroupTable";
-import timeTableData from "../../testdataset/testdata.json"; // JSON 파일 import
+import ConvertToTestData from "./ConvertData"; // ConvertData에서 데이터 불러오기
 import processData from "./processData"; // processData 함수 import
 import GroupFriendList from "./GroupFriendList";
 import GroupTab from "../../components/GroupTab";
@@ -12,18 +12,31 @@ const GroupPage = () => {
   const { name } = useParams(); // 선택된 그룹 이름
   const [groupData, setGroupData] = useState(null);
   const [selectedFriends, setSelectedFriends] = useState([]); // 선택된 멤버 상태
+  const [timeTableData, setTimeTableData] = useState(null); // 시간표 데이터 상태
+
+  useEffect(() => {
+    // ConvertData로 시간표 데이터 가져오기
+    const fetchTimeTableData = async () => {
+      const data = await ConvertToTestData();
+      setTimeTableData(data);
+    };
+
+    fetchTimeTableData();
+  }, []);
 
   useEffect(() => {
     // 선택된 그룹 데이터 가져오기
-    const group = timeTableData.groups[name];
-    if (group) {
-      setGroupData(group);
+    if (timeTableData && timeTableData.groups) {
+      const group = timeTableData.groups[name];
+      if (group) {
+        setGroupData(group);
+      }
     }
-  }, [name]);
+  }, [name, timeTableData]);
 
   // 멤버들의 시간표만 필터링하여 전달
   const filteredTimeTableData = {};
-  if (groupData && selectedFriends.length > 0) {
+  if (groupData && selectedFriends.length > 0 && timeTableData) {
     selectedFriends.forEach((member) => {
       filteredTimeTableData[member] = timeTableData.timeTable[member];
     });

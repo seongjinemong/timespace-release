@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import GetGroupDataApi from "./GetDataApi";
+import GetGroupDataApi from "./ConvertData";
 
 const GroupListComponent = () => {
   const [groups, setGroups] = useState([]); // 그룹 데이터를 저장

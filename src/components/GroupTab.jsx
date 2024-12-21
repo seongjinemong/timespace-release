@@ -1,16 +1,35 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom"; // Link 컴포넌트 임포트
+import ConvertToTestData from "../pages/group/ConvertData";
 
 const GroupTab = ({ onSelectGroup }) => {
-  // 초기 그룹 데이터
-  const initialGroups = [
-    { id: 1, name: "리엑트 스터디", active: false },
-    { id: 2, name: "포리프", active: false },
-    { id: 3, name: "웹 개발", active: false},
-  ];
+  const [groups, setGroups] = useState([]); // 그룹 상태 관리
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  // 그룹 상태 관리
-  const [groups, setGroups] = useState(initialGroups);
+  useEffect(() => {
+    const fetchGroups = async () => {
+      try {
+        setLoading(true);
+        const data = await ConvertToTestData();
+        if (data && data.groups) {
+          const fetchedGroups = Object.keys(data.groups).map((groupName, index) => ({
+            id: index + 1,
+            name: groupName,
+            active: false,
+          }));
+          setGroups(fetchedGroups);
+        }
+      } catch (err) {
+        console.error("Error fetching group data:", err);
+        setError("Failed to load groups.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchGroups();
+  }, []);
 
   // 그룹 선택 시 active 상태 업데이트
   const handleGroupClick = (groupName) => {
@@ -29,6 +48,14 @@ const GroupTab = ({ onSelectGroup }) => {
     // 선택된 그룹 name 값을 부모 컴포넌트에 전달
     onSelectGroup(groupName);
   };
+
+  if (loading) {
+    return <p>Loading groups...</p>;
+  }
+
+  if (error) {
+    return <p>Error: {error}</p>;
+  }
 
   return (
     <div className="w-full">

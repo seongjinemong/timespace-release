@@ -1,56 +1,65 @@
 import React, { useEffect, useState } from "react";
-import GetGroupDataApi from "./GetDataApi";
+import ConvertToTestData from "./ConvertData";
 
-const ApiTest = () => {
-  const [groups, setGroups] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+const APITest = () => {
+  const [testData, setTestData] = useState(null);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchGroups = async () => {
+    const fetchData = async () => {
       try {
-        setIsLoading(true); // 로딩 시작
-        const data = await GetGroupDataApi(); // API 호출
+        setLoading(true);
+        const data = await ConvertToTestData();
         if (data) {
-          setGroups(data); // 데이터 상태 업데이트
+          setTestData(data);
+        } else {
+          console.error("No data returned from ConvertToTestData.");
         }
+        setLoading(false);
       } catch (err) {
-        console.error("Error fetching group data:", err);
-        setError(err.message); // 에러 상태 저장
-      } finally {
-        setIsLoading(false); // 로딩 종료
+        console.error("Error fetching test data:", err);
+        setError(err);
+        setLoading(false);
       }
     };
 
-    fetchGroups();
+    fetchData();
   }, []);
 
-  if (isLoading) {
-    return <p>Loading group data...</p>;
-  }
-
-  if (error) {
-    return <p>Error: {error}</p>;
-  }
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error.message}</div>;
 
   return (
     <div>
-      <h1>Group Data</h1>
-      {groups.length > 0 ? (
-        <ul>
-          {groups.map((group) => (
-            <li key={group.id}>
-              <strong>Name:</strong> {group.name} <br />
-              <strong>Created At:</strong> {new Date(group.createdAt).toLocaleString()} <br />
-              <strong>Updated At:</strong> {new Date(group.updatedAt).toLocaleString()}
-            </li>
+      <h1>Converted Test Data</h1>
+      {testData ? (
+        <div>
+          <h2>Groups</h2>
+          <pre style={{ backgroundColor: "#f4f4f4", padding: "10px" }}>
+            {JSON.stringify(testData.groups, null, 2)}
+          </pre>
+
+          <h2>TimeTable</h2>
+          {Object.entries(testData.timeTable).map(([email, days]) => (
+            <div key={email} style={{ marginBottom: "20px" }}>
+              <h3>{email}</h3>
+              {Object.entries(days).map(([day, entries]) => (
+                <div key={day}>
+                  <h4>{day}</h4>
+                  <pre style={{ backgroundColor: "#f4f4f4", padding: "10px" }}>
+                    {JSON.stringify(entries, null, 2)}
+                  </pre>
+                </div>
+              ))}
+            </div>
           ))}
-        </ul>
+        </div>
       ) : (
-        <p>No groups found.</p>
+        <p>No test data available.</p>
       )}
     </div>
   );
 };
 
-export default ApiTest;
+export default APITest;
