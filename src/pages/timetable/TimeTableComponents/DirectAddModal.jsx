@@ -29,7 +29,6 @@ const DirectAddModal = ({ isOpen, onClose, onAddSubject }) => {
     }
   }, [isOpen]);
 
-
   const generateRandomColor = () => {
     const colors = [
       "bg-red-200",
@@ -44,8 +43,8 @@ const DirectAddModal = ({ isOpen, onClose, onAddSubject }) => {
   };
 
   const handleSubmit = () => {
-    const dayIndex = (days.indexOf(day) ) % days.length;  // 요일 인덱스 보정
-    const adjustedDay = days[dayIndex];   
+    const dayIndex = days.indexOf(day) % days.length; // 요일 인덱스 보정
+    const adjustedDay = days[dayIndex];
 
     const newSubject = {
       name,
@@ -55,15 +54,20 @@ const DirectAddModal = ({ isOpen, onClose, onAddSubject }) => {
       color: generateRandomColor(), // 랜덤 색상 추가
     };
 
-    onAddSubject(newSubject);   
+    onAddSubject(newSubject);
     onClose();
   };
+
+  // startTime 이후의 endTime 만 받도록 filtering
+  const filteredEndTimeOptions = timeOptions.filter(
+    (time) => convertTimeToMinutes(time) > convertTimeToMinutes(startTime)
+  );
 
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 z-50">
-      <ShadowBox width="w-[400px]" padding="p-6">
+    <div className="fixed inset-0 flex items-center justify-center bg-opacity-50 z-50">
+      <ShadowBox width="w-full" padding="p-6">
         <div className="bg-white rounded-lg shadow-lg p-6 space-y-4">
           <h2 className="text-lg font-bold text-black">과목 추가</h2>
           <div className="space-y-2">
@@ -80,7 +84,7 @@ const DirectAddModal = ({ isOpen, onClose, onAddSubject }) => {
               className="bg-white w-full p-2 border border-gray-300 rounded text-black"
             >
               {days.map((d) => (
-                <option key={d} value={d}>  
+                <option key={d} value={d}>
                   {d}
                 </option>
               ))}
@@ -102,7 +106,7 @@ const DirectAddModal = ({ isOpen, onClose, onAddSubject }) => {
                 onChange={(e) => setEndTime(e.target.value)}
                 className="bg-white w-1/2 p-2 border border-gray-300 rounded text-black"
               >
-                {timeOptions.map((time) => (
+                {filteredEndTimeOptions.map((time) => (
                   <option key={time} value={time}>
                     {time}
                   </option>
@@ -122,7 +126,7 @@ const DirectAddModal = ({ isOpen, onClose, onAddSubject }) => {
             <ShadowBox width="w-auto" padding="">
               <button
                 onClick={handleSubmit}
-                className="px-4 py-2  text-black font-semibold rounded-lg active:translate-y-1 active:shadow-none"
+                className="px-4 py-2 text-black font-semibold rounded-lg active:translate-y-1 active:shadow-none"
               >
                 추가
               </button>

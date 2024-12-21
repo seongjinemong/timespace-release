@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 
@@ -24,12 +24,14 @@ const timeLabels = [
 ];
 
 const Timetable = () => {
+  const timetableParent = useRef(null); // 시간표 부모 요소
+  const [timetableParentWidth, setTimetableParentWidth] = useState(0); // 시간표 부모 요소 너비
+
   // 삭제 모드
   const { isEditMode, toggleEditMode, message } = useTimetableEdit();
 
   const [isDirectAddModalOpen, setDirectAddModalOpen] = useState(false);
   const [subjects, setSubjects] = useState([]);
-
 
   const openDirectAddModal = () => setDirectAddModalOpen(true);
   const closeDirectAddModal = () => setDirectAddModalOpen(false);
@@ -47,14 +49,17 @@ const Timetable = () => {
   const fetchTimetable = async () => {
     try {
       const res = await axios.get(
-        import.meta.env.VITE_SERVER_URL + "/timetable", 
-        { timetable: subjects },
+        import.meta.env.VITE_SERVER_URL + "/timetable",
         {
           withCredentials: true,
         }
       );
       if (res.status === 200) {
-        setSubjects(res.data);
+        const timeData = res.data.data;
+
+        // console.log(timeData); // 불러온 거 확인
+
+        if (timeData != undefined) setSubjects(timeData); // <--------------- 필요한 피일별로 수정
         toast.success("GET timetable successful!");
       } else {
         toast.error("GET failed!");
@@ -68,6 +73,16 @@ const Timetable = () => {
   useEffect(() => {
     fetchTimetable();
   }, []); // 빈 배열로 설정 -> 한 번만 실행
+
+  useEffect(() => {
+    console.log(
+      "width",
+      timetableParent.current ? timetableParent.current.offsetWidth : 0
+    );
+    console.log(timetableParent.current.getBoundingClientRect());
+
+    setTimetableParentWidth(timetableParent.current.offsetWidth);
+  }, [timetableParent.current]);
 
   // "저장" 버튼 핸들러
   const saveTimetable = async () => {
@@ -98,7 +113,7 @@ const Timetable = () => {
       {/* 삭제 모드 메시지 */}
       {message && (
         <div
-          className="animate-fadeOut fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-gray-800 text-white text-center text-lg px-4 py-2 rounded shadow-lg z-50"
+          className="opacity-50 animate-fadeOut fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-gray-800 text-white text-center text-lg px-4 py-2 rounded shadow-lg z-50"
           style={{ transition: "opacity 0.5s ease-in-out" }}
           dangerouslySetInnerHTML={{ __html: message }}
         />
@@ -128,43 +143,31 @@ const Timetable = () => {
 
         {/* 시간표 영역 */}
         <div
-          className="relative border border-gray-300 bg-white"
-          style={{ width: "700px", height: "500px" }}
+          className="border border-gray-300 bg-white w-full h-[500px] flex flex-col"
+          ref={timetableParent} // 시간표 부모 요소
+          // style={{ width: "100%", height: "500px" }}
         >
           {/* 요일 */}
-          <div className="absolute top-0 left-[100px] flex">
+          <div className="flex">
+            <div
+              className="flex flex-1 h-[40px] items-center justify-center border-r border-gray-300 text-black font-semibold bg-gray-100"
+              // style={{ width: "100px", height: "40px" }}
+            >
+              {""}
+            </div>
             {days.map((day) => (
               <div
                 key={day}
-                className="flex items-center justify-center border-r border-gray-300 text-black font-semibold bg-gray-100"
-                style={{ width: "100px", height: "40px" }}
+                className="flex flex-1 items-center justify-center border-r border-gray-300 text-black font-semibold bg-gray-100"
+                // style={{ width: "100px", height: "40px" }}
               >
                 {day}
               </div>
             ))}
           </div>
 
-          {/* 시간표 셀 */}
-          <div
-            className="absolute top-[40px] left-[100px] grid"
-            style={{
-              gridTemplateColumns: `repeat(${days.length}, 100px)`,
-              gridTemplateRows: `repeat(${timeLabels.length}, 46px)`,
-            }}
-          >
-            {Array.from({ length: days.length * timeLabels.length }).map(
-              (_, index) => (
-                <div
-                  key={index}
-                  className="border-b border-r border-gray-300"
-                  style={{ height: "46px" }}
-                ></div>
-              )
-            )}
-          </div>
-
-          {/* 가로선과 시간 레이블 */}
-          <div className="absolute top-[40px] left-0">
+          {/* 가로선 & 시간 레이블 */}
+          <div className=" top-[40px] left-0">
             {timeLabels.map((time) => (
               <div
                 key={time}
@@ -172,10 +175,11 @@ const Timetable = () => {
                 style={{ height: "46px", fontSize: "12px" }} // 폰트 크기 조정 및 배경색 설정
               >
                 <div
-                  className="absolute left-0 w-[100px] h-full flex items-center justify-center"
+                  className="absolute left-0 h-full flex items-center justify-center"
                   style={{
                     borderRight: "1px solid #ccc",
                     backgroundColor: "#f3f3f3", // 추가로 회색 강조
+                    width: timetableParentWidth / 8,
                   }}
                 >
                   {time}
@@ -197,10 +201,10 @@ const Timetable = () => {
                 key={index}
                 className={`absolute text-black text-sm rounded-lg flex justify-center items-center ${subject.color}`} // 색상 적용
                 style={{
-                  top: `${startTop + 40}px`, // 상단 요일 헤더 높이 보정
-                  left: `${100 * dayIndex + 100}px`,
+                  top: `${startTop + 105}px`, // 상단 요일 헤더 높이 보정
+                  left: `${(timetableParentWidth / 8) * dayIndex + 130}px`,
                   height: `${height}px`,
-                  width: "100px",
+                  width: timetableParentWidth / 8,
                 }}
                 onClick={() => isEditMode && deleteSubject(index)}
               >
@@ -211,19 +215,21 @@ const Timetable = () => {
         </div>
       </ShadowBox>
 
-      {/* 하단 버튼 */}
-      <ShadowBox width="w-auto" padding="p-3">
-        <div className="flex justify-center space-x-10 transform -translate-y-1">
-          <ShadowBox width="w-auto" padding="p-0">
-            <button
-              onClick={openDirectAddModal}
-              className="px-4 py-2 bg-white text-black font-semibold rounded-lg active:translate-y-1 active:shadow-none"
-            >
-              추가하기
-            </button>
-          </ShadowBox>
-        </div>
+      {/* <ShadowBox width="w-auto" padding="p-3"> */}
+      {/* <div className="flex justify-center space-x-10 transform -translate-y-1"> */}
+
+      {/* '직접 추가' 버튼 */}
+      <ShadowBox width="w-auto" padding="p-0">
+        <button
+          onClick={openDirectAddModal}
+          className="px-4 py-2 bg-white text-black font-semibold rounded-lg active:translate-y-1 active:shadow-none"
+        >
+          추가하기
+        </button>
       </ShadowBox>
+
+      {/* </div> */}
+      {/* </ShadowBox> */}
 
       {/* 모달 컴포넌트 */}
       <DirectAddModal
