@@ -68,7 +68,7 @@ export default function Mypage() {
   };
 
   return (
-    <div className="w-full min-h-screen">
+    <div className="w-full">
       <div className="flex flex-col items-center gap-8 p-6 text-seagull-950">
         {/* 내 신상정보 */}
         <div className="p-8 rounded-lg bg-white w-full max-w-2xl border-2 border-seagull-900 shadow-[0_8px_0_theme(colors.seagull.900)] min-h-[200px]">

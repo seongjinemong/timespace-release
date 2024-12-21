@@ -70,7 +70,7 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <div className="min-h-screen">
+    <div>
       <ToastContainer
         position="bottom-right"
         autoClose={5000}

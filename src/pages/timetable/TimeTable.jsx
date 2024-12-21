@@ -102,7 +102,7 @@ const Timetable = () => {
         }
       );
       if (res.status === 200) {
-        // toast.success("POST timetable successful!");
+        toast.success("시간표 저장 성공!");
       } else {
         // toast.error("POST failed!");
       }
@@ -112,7 +112,7 @@ const Timetable = () => {
   };
 
   return (
-    <div className="flex flex-col justify-center items-center min-h-screen space-y-4 transform -translate-y-4 ">
+    <div className="flex flex-col justify-center items-center space-y-4 transform -translate-y-4 mt-10 ">
       {/* 삭제 모드 메시지 */}
       {message && (
         <div
@@ -197,7 +197,7 @@ const Timetable = () => {
             return (
               <div
                 key={index}
-                className={`absolute text-black text-sm flex justify-center items-center ${subject.color}`} // 색상 적용
+                className={` absolute text-black text-sm flex justify-center items-center ${subject.color}`} // 색상 적용
                 style={{
                   top: `${startTop + 40}px`, // 상단 요일 헤더 높이 보정
                   left: `${

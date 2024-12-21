@@ -99,7 +99,7 @@ const ProfileTable = () => {
               {DAYS.map((day) => (
                 <div
                   key={day}
-                  className="flex flex-1 items-center justify-center border-r border-gray-300 text-black font-semibold bg-gray-100"
+                  className="flex flex-1 items-center justify-center border-r border-gray-300 text-xl text-black font-semibold bg-gray-100"
                 >
                   {day}
                 </div>
@@ -107,18 +107,18 @@ const ProfileTable = () => {
             </div>
 
             {/* 시간 레이블과 그리드 */}
-            <div className="relative flex-1">
+            <div className="relative flex-1 ">
               {TIME_SLOTS.map((time) => (
                 <div
                   key={time}
-                  className="absolute w-full border-b border-gray-300"
+                  className="absolute w-full border-b border-gray-300  "
                   style={{
                     height: `${cellHeight}px`,
                     top: `${TIME_SLOTS.indexOf(time) * cellHeight}px`,
                   }}
                 >
                   <div
-                    className="absolute left-0 h-full flex items-center justify-center text-sm"
+                    className="text-xl absolute left-0 h-full flex items-center justify-center text-sm"
                     style={{
                       width: timetableParentWidth / 8,
                       borderRight: "1px solid #ccc",
@@ -144,7 +144,7 @@ const ProfileTable = () => {
                 return (
                   <div
                     key={index}
-                    className={`absolute text-black text-sm flex justify-center items-center ${subject.color}`}
+                    className={`absolute text-black text-xl flex justify-center items-center ${subject.color}`}
                     style={{
                       top: `${startTop}px`,
                       left: `${(timetableParentWidth / 8) * (dayIndex + 1)}px`,

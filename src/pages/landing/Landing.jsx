@@ -25,7 +25,7 @@ export default function Landing() {
       // authStore 상태 업데이트 추가
       useAuthStore.getState().setCredentials(credentialResponse);
       toast.success("Login successful!");
-      navigate("/timetable");
+      navigate("/profile");
     } else {
       toast.error("Login failed!");
     }

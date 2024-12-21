@@ -36,7 +36,12 @@ const DirectAddModal = ({ isOpen, onClose, onAddSubject }) => {
       "bg-purple-200",
       "bg-pink-200",
       "bg-indigo-200",
+      "bg-teal-200",
+      "bg-orange-200",
+      "bg-cyan-200",
+      "bg-lime-200",
     ];
+
     return colors[Math.floor(Math.random() * colors.length)];
   };
 
