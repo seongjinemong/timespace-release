@@ -3,7 +3,7 @@ import ShadowBox from "../../../components/ShadowBox";
 
 const days = ["월", "화", "수", "목", "금", "토", "일"];
 const timeOptions = Array.from({ length: 21 }, (_, i) => {
-  const hour = 9 + Math.floor(i / 2); // 09:00 ~ 21:00
+  const hour = 9 + Math.floor(i / 2); // 09:00 ~ 19:00
   const minutes = i % 2 === 0 ? "00" : "30";
   return `${hour}:${minutes}`;
 });

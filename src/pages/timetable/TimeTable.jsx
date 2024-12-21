@@ -2,7 +2,6 @@ import { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 
-import Navigation from "../../components/Navigation";
 import { TbTrash } from "react-icons/tb"; // 쓰레기통 아이콘
 
 import DirectAddModal from "./TimeTableComponents/DirectAddModal"; // 직접 추가 모달
@@ -60,9 +59,9 @@ const Timetable = () => {
         console.log(timeData); // 불러온 거 확인
 
         if (timeData != undefined) setSubjects(timeData); // <--------------- 필요한 피일별로 수정
-        toast.success("GET timetable successful!");
+        // toast.success("GET timetable successful!");
       } else {
-        toast.error("GET failed!");
+        // toast.error("GET failed!");
       }
     } catch (e) {
       toast.error(e.message);
@@ -95,9 +94,9 @@ const Timetable = () => {
         }
       );
       if (res.status === 200) {
-        toast.success("POST timetable successful!");
+        // toast.success("POST timetable successful!");
       } else {
-        toast.error("POST failed!");
+        // toast.error("POST failed!");
       }
     } catch (e) {
       toast.error(e.message);
@@ -106,10 +105,6 @@ const Timetable = () => {
 
   return (
     <div className="flex flex-col justify-center items-center min-h-screen space-y-4 transform -translate-y-4 ">
-      <div className="w-4/5 transform -translate-y-4">
-        <Navigation />
-      </div>
-
       {/* 삭제 모드 메시지 */}
       {message && (
         <div
@@ -145,21 +140,16 @@ const Timetable = () => {
         <div
           className="border border-gray-300 bg-white w-full h-[500px] flex flex-col"
           ref={timetableParent} // 시간표 부모 요소
-          // style={{ width: "100%", height: "500px" }}
         >
           {/* 요일 */}
           <div className="flex">
-            <div
-              className="flex flex-1 h-[40px] items-center justify-center border-r border-gray-300 text-black font-semibold bg-gray-100"
-              // style={{ width: "100px", height: "40px" }}
-            >
+            <div className="flex flex-1 h-[40px] items-center justify-center border-r border-gray-300 text-black font-semibold bg-gray-100">
               {""}
             </div>
             {days.map((day) => (
               <div
                 key={day}
                 className="flex flex-1 items-center justify-center border-r border-gray-300 text-black font-semibold bg-gray-100"
-                // style={{ width: "100px", height: "40px" }}
               >
                 {day}
               </div>
@@ -215,9 +205,6 @@ const Timetable = () => {
         </div>
       </ShadowBox>
 
-      {/* <ShadowBox width="w-auto" padding="p-3"> */}
-      {/* <div className="flex justify-center space-x-10 transform -translate-y-1"> */}
-
       {/* '직접 추가' 버튼 */}
       <ShadowBox width="w-auto" padding="p-0">
         <button
@@ -227,9 +214,6 @@ const Timetable = () => {
           추가하기
         </button>
       </ShadowBox>
-
-      {/* </div> */}
-      {/* </ShadowBox> */}
 
       {/* 모달 컴포넌트 */}
       <DirectAddModal
