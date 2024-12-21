@@ -36,9 +36,17 @@ const APITest = () => {
       {testData ? (
         <div>
           <h2>Groups</h2>
-          <pre style={{ backgroundColor: "#f4f4f4", padding: "10px" }}>
-            {JSON.stringify(testData.groups, null, 2)}
-          </pre>
+          {Object.entries(testData.groups).map(([groupName, groupDetails]) => (
+            <div key={groupName} style={{ marginBottom: "20px" }}>
+              <h3>{groupName}</h3>
+              <p>
+                <strong>ID:</strong> {groupDetails.id}
+              </p>
+              <p>
+                <strong>Members:</strong> {JSON.stringify(groupDetails.members, null, 2)}
+              </p>
+            </div>
+          ))}
 
           <h2>TimeTable</h2>
           {Object.entries(testData.timeTable).map(([email, days]) => (

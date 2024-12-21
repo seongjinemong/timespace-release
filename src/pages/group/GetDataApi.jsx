@@ -81,7 +81,11 @@ const GetGroupData = async () => {
     };
 
     groupDetails.forEach((group) => {
-      groupDataWithMembers.groups[group.name] = { members: [] };
+      // Add group ID and members to the group data
+      groupDataWithMembers.groups[group.name] = { 
+        id: group.id, // Group ID added here
+        members: [] 
+      };
 
       group.members.forEach((member) => {
         groupDataWithMembers.groups[group.name].members.push(member.name);
