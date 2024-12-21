@@ -14,24 +14,27 @@ const ConvertToTestData = async () => {
     };
 
     Object.entries(groupData.groups).forEach(([groupName, groupDetails]) => {
-      // Initialize group members
-      testData.groups[groupName] = { members: groupDetails.members };
+      // 그룹 ID와 멤버를 추가
+      testData.groups[groupName] = { 
+        id: groupDetails.id, // 그룹 ID 추가
+        members: groupDetails.members 
+      };
 
       groupDetails.members.forEach((member) => {
-        // Initialize member in the timeTable
+        // 시간표 초기화
         if (!testData.timeTable[member]) {
           testData.timeTable[member] = {
             "월": [], "화": [], "수": [], "목": [], "금": [], "토": [], "일": []
           };
         }
 
-        // Add timetable data to the member
+        // 시간표 데이터 추가
         const memberTimeTable = groupData.timeTable[member];
         if (memberTimeTable) {
           Object.entries(memberTimeTable).forEach(([day, entries]) => {
             entries.forEach((entry) => {
               const { name, start, end } = entry;
-              // Avoid duplicate entries for the same day and name
+              // 중복 방지
               const existingEntry = testData.timeTable[member][day].find(
                 (e) => e.name === name && e.start === start && e.end === end
               );

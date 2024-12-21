@@ -2,14 +2,19 @@ import { useState, useEffect } from "react";
 import ShadowBox from "../../components/ShadowBox";
 import ModifyGroupList from "./ModifyGroupList"; // ModifyGroupList 컴포넌트 임포트
 
-const FriendsList = ({ members, onSelect }) => {
+const FriendsList = ({ groupId, members, onSelect }) => {
   const [selectedFriends, setSelectedFriends] = useState(members); // 초기값 설정
   const [isPopupOpen, setIsPopupOpen] = useState(false); // 팝업 상태 관리
 
   useEffect(() => {
     // members 변경 시 전체 선택 상태 초기화
     setSelectedFriends(members);
-    onSelect(members); // 초기값을 상위 컴포넌트에 전달
+
+    // 초기 렌더링 시에만 onSelect 호출
+    if (onSelect) {
+      onSelect(members);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [members]);
 
   const handleCheckboxChange = (name) => {
@@ -66,12 +71,13 @@ const FriendsList = ({ members, onSelect }) => {
       {/* ModifyGroupList 팝업 */}
       {isPopupOpen && (
         <ModifyGroupList
-          currentMembers={selectedFriends}
+          groupId={groupId} // 그룹 ID 전달
+          currentMembers={selectedFriends} // 현재 선택된 멤버 전달
           onUpdate={(updatedMembers) => {
-            setSelectedFriends(updatedMembers);
-            onSelect(updatedMembers);
+            setSelectedFriends(updatedMembers); // 선택된 멤버 업데이트
+            onSelect(updatedMembers); // 상위 컴포넌트로 전달
           }}
-          onClose={closePopup}
+          onClose={closePopup} // 팝업 닫기 함수
         />
       )}
     </div>

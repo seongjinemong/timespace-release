@@ -14,6 +14,10 @@ const GroupPage = () => {
   const [selectedFriends, setSelectedFriends] = useState([]); // 선택된 멤버 상태
   const [timeTableData, setTimeTableData] = useState(null); // 시간표 데이터 상태
 
+  function handleselectedFriends(friends) {
+    setSelectedFriends(friends);
+  }
+
   useEffect(() => {
     // ConvertData로 시간표 데이터 가져오기
     const fetchTimeTableData = async () => {
@@ -45,9 +49,22 @@ const GroupPage = () => {
   // processData로 필터링된 데이터 처리
   const result = selectedFriends.length > 0 ? processData(filteredTimeTableData) : {}; // 선택된 멤버가 없으면 빈 데이터 반환
 
+  // 그룹 이름 목록 생성
+  const groupNames = timeTableData?.groups
+    ? Object.keys(timeTableData.groups).map((key) => ({
+        id: key,
+        name: key,
+      }))
+    : [];
+
   return (
     <div className="flex flex-col h-screen overflow-y-auto">
       {/* 상단 네비게이션 바 */}
+      <div className="m-3">
+        <ShadowBox>
+          <Navigation />
+        </ShadowBox>
+      </div>
 
       {/* 콘텐츠 영역 */}
       <div className="flex flex-1 flex-col">
@@ -63,8 +80,9 @@ const GroupPage = () => {
           <div className="w-[30%] border-4 border-white bg-white m-2">
             <ShadowBox>
               <GroupFriendList 
+                groupId={groupData?.id} // 그룹 ID 전달
                 members={groupData ? groupData.members : []} 
-                onSelect={setSelectedFriends} // 선택된 멤버 업데이트
+                onSelect={handleselectedFriends} // 선택된 멤버 업데이트
               />
             </ShadowBox>
           </div>
@@ -73,12 +91,14 @@ const GroupPage = () => {
 
       <div className="m-3 pb-10">
         <ShadowBox>
-          <GroupTab />
+          <GroupTab
+            groups={groupNames} // 그룹 이름 목록 전달
+            onSelectGroup={(group) => console.log("Selected group:", group)} // 그룹 선택 콜백
+          />
         </ShadowBox>
       </div>
 
-      <footer className="w-full" style={{ height: "90%" }}>
-      </footer>
+      <footer className="w-full" style={{ height: "90%" }} />
     </div>
   );
 };
