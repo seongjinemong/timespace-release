@@ -43,12 +43,79 @@ const GetGroupData = async () => {
         }
 
         const groupData = memberResponse.data;
-        return { ...group, members: groupData.members };
+
+        // Step 3: Fetch timetable for each member in the group
+        const membersWithTimetables = await Promise.all(
+          groupData.members.map(async (member) => {
+            console.log(`Fetching timetable for member ID: ${member.id}`);
+
+            try {
+              const timetableResponse = await axios.get(`${serverUrl}/timetable/${member.id}`, {
+                withCredentials: true,
+                headers: {
+                  Authorization: `Bearer ${localStorage.getItem("token")}`,
+                },
+              });
+
+              if (timetableResponse.status === 200) {
+                return { ...member, timetable: timetableResponse.data };
+              } else {
+                console.error(`Failed to fetch timetable for member ID ${member.id}`);
+                return { ...member, timetable: null };
+              }
+            } catch (error) {
+              console.error(`Error fetching timetable for member ID ${member.id}:`, error);
+              return { ...member, timetable: null };
+            }
+          })
+        );
+
+        return { ...groupData, members: membersWithTimetables };
       })
     );
 
-    console.log("Final group details:", groupDetails);
-    return groupDetails;
+    // Step 4: Transform data into required format with groups and members
+    const groupDataWithMembers = {
+      timeTable: {},
+      groups: {}
+    };
+
+    groupDetails.forEach((group) => {
+      groupDataWithMembers.groups[group.name] = { members: [] };
+
+      group.members.forEach((member) => {
+        groupDataWithMembers.groups[group.name].members.push(member.name);
+
+        if (!groupDataWithMembers.timeTable[member.name]) {
+          groupDataWithMembers.timeTable[member.name] = {
+            "월": [], "화": [], "수": [], "목": [], "금": [], "토": [], "일": []
+          };
+        }
+
+        if (member.timetable && member.timetable.data) {
+          member.timetable.data.forEach((entry) => {
+            const { day, name, startTime, endTime } = entry;
+            const startHour = Math.floor(startTime / 60);
+            const endHour = Math.floor(endTime / 60);
+
+            const existingEntry = groupDataWithMembers.timeTable[member.name][day].find(
+              (e) => e.name === name && e.start === startHour && e.end === endHour
+            );
+
+            if (!existingEntry) {
+              groupDataWithMembers.timeTable[member.name][day].push({
+                name,
+                start: startHour,
+                end: endHour
+              });
+            }
+          });
+        }
+      });
+    });
+
+    console.log("Final Group Data with Members and TimeTables:", JSON.stringify(groupDataWithMembers, null, 2));
+    return groupDataWithMembers;
   } catch (error) {
     console.error("Error during API call:", error.message);
     return null;

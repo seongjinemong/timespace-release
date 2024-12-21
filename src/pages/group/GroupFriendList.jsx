@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react";
 import ShadowBox from "../../components/ShadowBox";
+import ModifyGroupList from "./ModifyGroupList"; // ModifyGroupList 컴포넌트 임포트
 
 const FriendsList = ({ members, onSelect }) => {
   const [selectedFriends, setSelectedFriends] = useState(members); // 초기값 설정
+  const [isPopupOpen, setIsPopupOpen] = useState(false); // 팝업 상태 관리
 
   useEffect(() => {
     // members 변경 시 전체 선택 상태 초기화
@@ -19,12 +21,20 @@ const FriendsList = ({ members, onSelect }) => {
     onSelect(updatedFriends); // 상위 컴포넌트로 전달
   };
 
+  const openPopup = () => {
+    setIsPopupOpen(true);
+  };
+
+  const closePopup = () => {
+    setIsPopupOpen(false);
+  };
+
   return (
     <div>
       <div className="flex flex-col">
         <div className="flex items-center justify-center m-3">
           <ShadowBox>
-            <button>그룹에 친구추가</button>
+            <button onClick={openPopup}>그룹에 친구추가</button>
           </ShadowBox>
         </div>
         <div
@@ -52,6 +62,18 @@ const FriendsList = ({ members, onSelect }) => {
           )}
         </div>
       </div>
+
+      {/* ModifyGroupList 팝업 */}
+      {isPopupOpen && (
+        <ModifyGroupList
+          currentMembers={selectedFriends}
+          onUpdate={(updatedMembers) => {
+            setSelectedFriends(updatedMembers);
+            onSelect(updatedMembers);
+          }}
+          onClose={closePopup}
+        />
+      )}
     </div>
   );
 };

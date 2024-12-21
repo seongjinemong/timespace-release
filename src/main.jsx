@@ -31,7 +31,7 @@ const router = createBrowserRouter([
       },
       {
         loader: tokenLoader,
-        errorElement: <Navigate to="/" />,
+        // errorElement: <Navigate to="/" />,
         children: [
           {
             path: "/mypage",
