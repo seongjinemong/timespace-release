@@ -65,8 +65,8 @@ const DirectAddModal = ({ isOpen, onClose, onAddSubject }) => {
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-opacity-50 z-50">
-      <ShadowBox width="w-full" padding="p-6">
-        <div className="bg-white rounded-lg shadow-lg p-6 space-y-4">
+      <ShadowBox width="w-1/2" padding="p-6">
+        <div className="bg-white rounded-lg  p-6 space-y-4">
           <h2 className="text-lg font-bold text-black">과목 추가</h2>
           <div className="space-y-2">
             <input

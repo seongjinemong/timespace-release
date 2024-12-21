@@ -123,8 +123,8 @@ const Timetable = () => {
       )}
 
       <ShadowBox width="w-3/4 max-w-4xl" padding="p-6">
-        <div className="flex justify-between items-center mb-6">
-          <h2 className="text-l text-black font-bold">내 시간표</h2>
+        <div className="flex justify-between items-center mb-4">
+          <h2 className="text-xl text-black font-bold">내 시간표</h2>
           <div className="flex items-center space-x-4">
             <button
               onClick={toggleEditMode}

@@ -29,7 +29,7 @@ const Navigation = () => {
       <nav className="w-full px-6 py-4 flex justify-between items-center">
         <Link
           to="/profile"
-          className="font-['Inter'] text-2xl font-bold text-seagull-950 cursor-pointer"
+          className="font-['Inter'] text-3xl font-bold text-seagull-950 cursor-pointer"
         >
           시공간
         </Link>
@@ -39,13 +39,13 @@ const Navigation = () => {
             <>
               <Link
                 to="/timetable"
-                className="text-sm text-seagull-900 font-medium hover:opacity-80"
+                className="text-xl text-seagull-900 font-medium hover:opacity-80"
               >
                 내 시간표 수정
               </Link>
               <Link
                 to="/mypage"
-                className="text-sm text-seagull-900 font-medium hover:opacity-80"
+                className="text-xl text-seagull-900 font-medium hover:opacity-80"
               >
                 마이페이지
               </Link>
@@ -56,12 +56,12 @@ const Navigation = () => {
         <div className="flex items-center gap-4">
           {isLoggedIn ? (
             <>
-              <span className="text-sm text-seagull-950 font-bold">
+              <span className="text-l text-seagull-950 font-bold">
                 {userName}
               </span>
               <button
                 onClick={handleLogout}
-                className="text-sm text-seagull-900 font-medium hover:opacity-80"
+                className="text-l text-seagull-900 font-medium hover:opacity-80"
               >
                 로그아웃
               </button>
