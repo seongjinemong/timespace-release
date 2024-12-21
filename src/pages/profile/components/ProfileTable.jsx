@@ -15,14 +15,14 @@ const TIME_SLOTS = [
   "18:00 ~ 19:00",
 ];
 
-const CELL_HEIGHT = 65; // 각 셀의 높이를 증가
-const HEADER_HEIGHT = 60; // 헤더의 높이를 증가
+const HEADER_HEIGHT = 60;
 
 const ProfileTable = () => {
   const [timetableData, setTimetableData] = useState([]);
   const [loading, setLoading] = useState(true);
   const timetableParent = useRef(null);
   const [timetableParentWidth, setTimetableParentWidth] = useState(0);
+  const [cellHeight, setCellHeight] = useState(65);
 
   useEffect(() => {
     const getTimetableData = async () => {
@@ -44,16 +44,27 @@ const ProfileTable = () => {
   }, []);
 
   useEffect(() => {
-    if (timetableParent.current) {
-      setTimetableParentWidth(timetableParent.current.offsetWidth);
-    }
+    const updateDimensions = () => {
+      if (timetableParent.current) {
+        setTimetableParentWidth(timetableParent.current.offsetWidth);
+        // 부모 요소의 높이에서 헤더 높이와 패딩을 제외한 값을 셀 개수로 나누어 각 셀의 높이 계산
+        const availableHeight =
+          timetableParent.current.offsetHeight - HEADER_HEIGHT;
+        const newCellHeight = availableHeight / TIME_SLOTS.length;
+        setCellHeight(newCellHeight);
+      }
+    };
+
+    updateDimensions();
+    window.addEventListener("resize", updateDimensions);
+    return () => window.removeEventListener("resize", updateDimensions);
   }, [timetableParent.current]);
 
   if (loading) {
     return (
-      <div className="relative h-[842px]">
-        <div className="absolute top-[11px] left-0 right-0 h-[831px] bg-[#254D64] rounded-[20px]" />
-        <div className="relative h-[831px] bg-white border-[3px] border-[#254D64] rounded-[20px] p-4 flex items-center justify-center">
+      <div className="relative h-full">
+        <div className="absolute top-[11px] left-0 right-0 bottom-0 bg-[#254D64] rounded-[20px]" />
+        <div className="relative h-full bg-white border-[3px] border-[#254D64] rounded-[20px] p-4 flex items-center justify-center">
           <div>로딩중...</div>
         </div>
       </div>
@@ -61,24 +72,26 @@ const ProfileTable = () => {
   }
 
   return (
-    <div className="relative h-[842px]">
-      <div className="absolute top-[11px] left-0 right-0 h-[831px] bg-[#254D64] rounded-[20px]" />
-      <div className="relative h-[831px] bg-white border-[3px] border-[#254D64] rounded-[20px] p-4">
+    <div className="relative h-full">
+      <div className="absolute top-[11px] left-0 right-0 h-[calc(100%-22px)] bg-[#254D64] rounded-[20px]" />
+      <div className="relative h-[calc(100%-22px)] bg-white border-[3px] border-[#254D64] rounded-[20px] p-4">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-xl text-black font-bold">내 시간표</h2>
           <div className="flex space-x-2"></div>
         </div>
 
-        <div className="h-[750px]">
-          {" "}
-          {/* 전체 높이 조정 */}
+        <div className="h-[calc(100%-3rem)]">
           <div
             className="border border-gray-300 bg-white w-full h-full flex flex-col"
             ref={timetableParent}
           >
             {/* 요일 헤더 */}
             <div
-              className={`flex h-[${HEADER_HEIGHT}px] min-h-[${HEADER_HEIGHT}px]`}
+              className="flex"
+              style={{
+                height: `${HEADER_HEIGHT}px`,
+                minHeight: `${HEADER_HEIGHT}px`,
+              }}
             >
               <div className="flex flex-1 items-center justify-center border-r border-gray-300 text-black font-semibold bg-gray-100">
                 {""}
@@ -100,8 +113,8 @@ const ProfileTable = () => {
                   key={time}
                   className="absolute w-full border-b border-gray-300"
                   style={{
-                    height: `${CELL_HEIGHT}px`,
-                    top: `${TIME_SLOTS.indexOf(time) * CELL_HEIGHT}px`,
+                    height: `${cellHeight}px`,
+                    top: `${TIME_SLOTS.indexOf(time) * cellHeight}px`,
                   }}
                 >
                   <div
@@ -120,10 +133,10 @@ const ProfileTable = () => {
               {/* 과목 데이터 */}
               {timetableData.map((subject, index) => {
                 const startHour = Math.floor(subject.startTime / 60);
-                const startIndex = startHour - 9; // 9시가 시작 시간
-                const startTop = startIndex * CELL_HEIGHT;
+                const startIndex = startHour - 9;
+                const startTop = startIndex * cellHeight;
                 const duration = (subject.endTime - subject.startTime) / 60;
-                const height = duration * CELL_HEIGHT;
+                const height = duration * cellHeight;
                 const dayIndex = DAYS.indexOf(subject.day);
 
                 if (dayIndex === -1) return null;

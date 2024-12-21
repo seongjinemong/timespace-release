@@ -27,7 +27,7 @@ export default function GroupTab() {
       <div className="absolute top-[11px] left-0 right-0 h-[97px] bg-[#254D64] rounded-[20px]" />
       <div className="relative h-[97px] bg-white border-[3px] border-[#254D64] rounded-[20px] px-8">
         <div className="flex items-center h-full gap-4">
-          <span className="text-2xl font-bold">그룹</span>
+          <span className="text-xl font-bold">그룹</span>
           {loading ? (
             <div>로딩중...</div>
           ) : (
@@ -37,12 +37,12 @@ export default function GroupTab() {
                   <button
                     key={group.id}
                     onClick={() => handleGroupClick(group.id, group.name)}
-                    className={`h-[61px] px-4 border-[3px] border-[#254D64] rounded-[10px] text-2xl
-                     ${
-                       group.id === activeGroup
-                         ? "bg-[#254D64] text-white"
-                         : "bg-white text-black"
-                     }`}
+                    className={`h-[61px] px-4 border-[3px] border-[#254D64] rounded-[10px] text-base
+                    ${
+                      group.id === activeGroup
+                        ? "bg-[#254D64] text-white"
+                        : "bg-white text-black"
+                    }`}
                   >
                     {group.name}
                   </button>
@@ -54,11 +54,11 @@ export default function GroupTab() {
                   placeholder="새 그룹 이름"
                   value={newGroupName}
                   onChange={(e) => setNewGroupName(e.target.value)}
-                  className="h-[61px] px-4 text-2xl border-[3px] border-[#254D64] rounded-[10px]"
+                  className="h-[61px] px-4 text-base border-[3px] border-[#254D64] rounded-[10px]"
                 />
                 <button
                   onClick={handleCreateGroup}
-                  className="h-[61px] px-4 border-[3px] border-[#254D64] rounded-[10px] text-2xl bg-white text-[#254D64] hover:bg-[#254D64] hover:text-white transition-colors"
+                  className="h-[61px] px-4 border-[3px] border-[#254D64] rounded-[10px] text-base bg-white text-[#254D64] hover:bg-[#254D64] hover:text-white transition-colors"
                 >
                   추가
                 </button>
