@@ -5,6 +5,8 @@ import "../../App.css";
 import { toast } from "react-toastify";
 import Logo from "../../assets/Logo.png";
 
+import { useAuthStore } from "../../store/authStore";
+
 export default function Landing() {
   const navigate = useNavigate();
 
@@ -20,6 +22,8 @@ export default function Landing() {
 
     if (res.status === 200) {
       localStorage.setItem("Credential", credentialResponse.credential);
+      // authStore 상태 업데이트 추가
+      useAuthStore.getState().setCredentials(credentialResponse);
       toast.success("Login successful!");
       navigate("/timetable");
     } else {
