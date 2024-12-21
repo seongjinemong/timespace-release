@@ -1,4 +1,21 @@
 import { useEffect, useState } from "react";
+import axios from "axios";
+
+// 상수 데이터
+const DAYS = [
+  { id: "mon", label: "월" },
+  { id: "tue", label: "화" },
+  { id: "wed", label: "수" },
+  { id: "thu", label: "목" },
+  { id: "fri", label: "금" },
+  { id: "sat", label: "토" },
+  { id: "sun", label: "일" },
+];
+
+const TIME_SLOTS = Array.from({ length: 10 }, (_, i) => {
+  const hour = i + 9;
+  return `${hour}:00 ~ ${hour + 1}:00`;
+});
 
 const ProfileTable = () => {
   const [timetableData, setTimetableData] = useState(null);
@@ -7,17 +24,13 @@ const ProfileTable = () => {
   const fetchTimetableData = async () => {
     try {
       setLoading(true);
-      const response = await fetch("/api/timetable");
-
-      if (!response.ok) {
-        setTimetableData({});
-        return;
-      }
-
-      const data = await response.json();
-      setTimetableData(data?.data || {});
+      const response = await axios.get(
+        `${import.meta.env.VITE_SERVER_URL}/timetable`,
+        { withCredentials: true }
+      );
+      setTimetableData(response.data?.data || {});
     } catch (error) {
-      console.error("Failed to fetch timetable:", error);
+      console.error("시간표 조회 에러:", error);
       setTimetableData({});
     } finally {
       setLoading(false);
@@ -27,11 +40,6 @@ const ProfileTable = () => {
   useEffect(() => {
     fetchTimetableData();
   }, []);
-
-  const getCellContent = (time, day) => {
-    if (!timetableData) return "\u00A0";
-    return timetableData[`${day}-${time}`] || "\u00A0";
-  };
 
   if (loading) {
     return (
@@ -53,45 +61,44 @@ const ProfileTable = () => {
           <div className="flex space-x-2"></div>
         </div>
 
-        <table className="w-full border-collapse">
-          <thead>
-            <tr>
-              <th className="w-20 border bg-gray-50 text-gray-900 py-2"></th>
-              <th className="w-28 border bg-gray-50 text-gray-900 py-2">월</th>
-              <th className="w-28 border bg-gray-50 text-gray-900 py-2">화</th>
-              <th className="w-28 border bg-gray-50 text-gray-900 py-2">수</th>
-              <th className="w-28 border bg-gray-50 text-gray-900 py-2">목</th>
-              <th className="w-28 border bg-gray-50 text-gray-900 py-2">금</th>
-              <th className="w-28 border bg-gray-50 text-gray-900 py-2">토</th>
-              <th className="w-28 border bg-gray-50 text-gray-900 py-2">일</th>
-            </tr>
-          </thead>
-          <tbody>
-            {[
-              "09:00 ~ 10:00",
-              "10:00 ~ 11:00",
-              "11:00 ~ 12:00",
-              "12:00 ~ 13:00",
-              "13:00 ~ 14:00",
-              "14:00 ~ 15:00",
-              "15:00 ~ 16:00",
-              "16:00 ~ 17:00",
-              "17:00 ~ 18:00",
-              "18:00 ~ 19:00",
-            ].map((time) => (
-              <tr key={time}>
-                <td className="border bg-gray-50 text-sm py-4 px-2">{time}</td>
-                {["mon", "tue", "wed", "thu", "fri", "sat", "sun"].map(
-                  (day) => (
-                    <td key={`${day}-${time}`} className="border text-center">
-                      {getCellContent(time, day)}
-                    </td>
-                  )
-                )}
-              </tr>
+        {/* 시간표 그리드 컨테이너 */}
+        <div className="overflow-auto h-[730px]">
+          <div className="grid grid-cols-[100px_repeat(7,1fr)]">
+            {/* 헤더 행 */}
+            <div className="bg-gray-50 border p-2"></div>
+            {DAYS.map((day) => (
+              <div
+                key={day.id}
+                className="bg-gray-50 border p-2 text-center font-medium"
+              >
+                {day.label}
+              </div>
             ))}
-          </tbody>
-        </table>
+
+            {/* 시간대별 행 */}
+            {TIME_SLOTS.map((time) => (
+              // 각 시간대 행
+              <>
+                {/* 시간 셀 */}
+                <div
+                  key={`time-${time}`}
+                  className="bg-gray-50 border p-2 text-sm"
+                >
+                  {time}
+                </div>
+                {/* 각 요일 셀 */}
+                {DAYS.map((day) => (
+                  <div
+                    key={`${day.id}-${time}`}
+                    className="border p-2 text-center"
+                  >
+                    {timetableData?.[`${day.id}-${time}`] || "\u00A0"}
+                  </div>
+                ))}
+              </>
+            ))}
+          </div>
+        </div>
       </div>
     </div>
   );

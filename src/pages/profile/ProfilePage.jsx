@@ -4,8 +4,8 @@ import GroupTab from "./components/GroupTab";
 
 export default function ProfilePage() {
   return (
-    <div className="bg-[#DFE4E6] min-h-screen p-5">
-      <div className="max-w-[1920px] mx-auto">
+    <div>
+      <div className="max-w-[1920px] mx-auto p-5">
         <div className="flex gap-4">
           <div className="w-[1390px]">
             <ProfileTable />

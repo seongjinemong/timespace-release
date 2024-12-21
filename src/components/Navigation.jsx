@@ -1,38 +1,84 @@
 import { Link } from "react-router-dom";
+import { useEffect } from "react";
+import { getUserInfo } from "../api/userApi";
+import { useAuthStore } from "../store/authStore";
 
 const Navigation = () => {
+  const { isLoggedIn, userName, setCredentials } = useAuthStore();
+
+  useEffect(() => {
+    const fetchUserInfo = async () => {
+      if (isLoggedIn) {
+        const userInfo = await getUserInfo();
+        // userInfo가 있을 경우 store 업데이트
+        if (userInfo) {
+          setCredentials({
+            credential: localStorage.getItem("Credential"),
+            name: userInfo.name,
+          });
+        }
+      }
+    };
+
+    fetchUserInfo();
+  }, [isLoggedIn, setCredentials]);
+
+  const handleLogout = () => {
+    localStorage.removeItem("Credential");
+    useAuthStore.getState().logout();
+    window.location.href = "/";
+  };
+
   return (
-    <div className="w-full ">
+    <div className="w-full">
       <nav className="w-full px-6 py-4 flex justify-between items-center">
         <Link
           to="/profile"
-          className="font-['Inter'] text-2xl font-bold text-seagull-950 cursor-pointer">
+          className="font-['Inter'] text-2xl font-bold text-seagull-950 cursor-pointer"
+        >
           시공간
         </Link>
 
         <div className="flex items-center gap-6">
-          <Link
-            to="/edit"
-            className="text-sm text-seagull-900 font-medium hover:opacity-80"
-          >
-            내 시간표 수정
-          </Link>
-          <Link
-            to="/profile"
-            className="text-sm text-seagull-900 font-medium hover:opacity-80"
-          >
-            마이페이지
-          </Link>
+          {isLoggedIn && (
+            <>
+              <Link
+                to="/timetable"
+                className="text-sm text-seagull-900 font-medium hover:opacity-80"
+              >
+                내 시간표 수정
+              </Link>
+              <Link
+                to="/profile"
+                className="text-sm text-seagull-900 font-medium hover:opacity-80"
+              >
+                마이페이지
+              </Link>
+            </>
+          )}
         </div>
 
         <div className="flex items-center gap-4">
-          <span className="text-sm text-seagull-950 font-bold">이름</span>
-          <Link
-            to="/login"
-            className="text-sm text-seagull-900 font-medium hover:opacity-80"
-          >
-            로그인
-          </Link>
+          {isLoggedIn ? (
+            <>
+              <span className="text-sm text-seagull-950 font-bold">
+                {userName}
+              </span>
+              <button
+                onClick={handleLogout}
+                className="text-sm text-seagull-900 font-medium hover:opacity-80"
+              >
+                로그아웃
+              </button>
+            </>
+          ) : (
+            <Link
+              to="/login"
+              className="text-sm text-seagull-900 font-medium hover:opacity-80"
+            >
+              로그인
+            </Link>
+          )}
         </div>
       </nav>
     </div>
