@@ -57,7 +57,7 @@ const Timetable = () => {
       if (res.status === 200) {
         const timeData = res.data.data;
 
-        // console.log(timeData); // 불러온 거 확인
+        console.log(timeData); // 불러온 거 확인
 
         if (timeData != undefined) setSubjects(timeData); // <--------------- 필요한 피일별로 수정
         toast.success("GET timetable successful!");
@@ -105,7 +105,7 @@ const Timetable = () => {
   };
 
   return (
-    <div className="flex flex-col justify-center items-center min-h-screen space-y-4 transform -translate-y-4">
+    <div className="flex flex-col justify-center items-center min-h-screen space-y-4 transform -translate-y-4 ">
       <div className="w-4/5 transform -translate-y-4">
         <Navigation />
       </div>
@@ -120,7 +120,7 @@ const Timetable = () => {
       )}
 
       <ShadowBox width="w-3/4 max-w-4xl" padding="p-6">
-        <div className="flex justify-between items-center mb-2">
+        <div className="flex justify-between items-center mb-6">
           <h2 className="text-l text-black font-bold">내 시간표</h2>
           <div className="flex items-center space-x-4">
             <button
@@ -171,7 +171,7 @@ const Timetable = () => {
             {timeLabels.map((time) => (
               <div
                 key={time}
-                className="relative flex items-center border-b border-gray-300 text-black bg-gray-200"
+                className="relative flex items-center border-b border-gray-300 text-black bg-white-200"
                 style={{ height: "46px", fontSize: "12px" }} // 폰트 크기 조정 및 배경색 설정
               >
                 <div
@@ -199,9 +199,9 @@ const Timetable = () => {
             return (
               <div
                 key={index}
-                className={`absolute text-black text-sm rounded-lg flex justify-center items-center ${subject.color}`} // 색상 적용
+                className={`absolute text-black text-sm flex justify-center items-center ${subject.color}`} // 색상 적용
                 style={{
-                  top: `${startTop + 105}px`, // 상단 요일 헤더 높이 보정
+                  top: `${startTop + 120}px`, // 상단 요일 헤더 높이 보정
                   left: `${(timetableParentWidth / 8) * dayIndex + 130}px`,
                   height: `${height}px`,
                   width: timetableParentWidth / 8,
