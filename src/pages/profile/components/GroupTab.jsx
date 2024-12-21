@@ -2,16 +2,24 @@
 import { useState } from "react";
 import { useGroups } from "../../../hooks/useGroups";
 
+import { useNavigate } from "react-router-dom";
+
 export default function GroupTab() {
   const [newGroupName, setNewGroupName] = useState("");
   const { groups, activeGroup, loading, error, createGroup, selectGroup } =
     useGroups();
+  const navigate = useNavigate();
 
   const handleCreateGroup = async () => {
     const success = await createGroup({ name: newGroupName });
     if (success) {
       setNewGroupName("");
     }
+  };
+
+  const handleGroupClick = (groupId, groupName) => {
+    selectGroup(groupId);
+    navigate(`/group/${groupName}`);
   };
 
   return (
@@ -28,7 +36,7 @@ export default function GroupTab() {
                 {groups.map((group) => (
                   <button
                     key={group.id}
-                    onClick={() => selectGroup(group.id)}
+                    onClick={() => handleGroupClick(group.id, group.name)}
                     className={`h-[61px] px-4 border-[3px] border-[#254D64] rounded-[10px] text-2xl
                      ${
                        group.id === activeGroup
