@@ -1,7 +1,7 @@
 {
     "timeTable": {
       "조성진": {
-        "월": [{"name": "Math", "start": 9, "end": 11}],
+        "월": [{"name": "Math", "start": 9, "end": 11}, {"name": "Math2", "start": 13, "end": 14}],
         "화": [{"name": "English", "start": 10, "end": 12}],
         "수": [{"name": "Physics", "start": 13, "end": 15}],
         "목": [{"name": "Chemistry", "start": 9, "end": 10}],

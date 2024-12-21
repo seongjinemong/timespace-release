@@ -1,29 +1,58 @@
 import axios from "axios";
 
-const GetDataApi = async () => {
+const GetGroupData = async () => {
   try {
     const serverUrl = import.meta.env.VITE_SERVER_URL;
 
+    // Step 1: Fetch groups the user belongs to
     console.log(`Fetching group data from: ${serverUrl}/group`);
 
-    const response = await axios.get(`${serverUrl}/group`, {
-      withCredentials: true, // 인증 쿠키 포함
+    const groupResponse = await axios.get(`${serverUrl}/group`, {
+      withCredentials: true,
       headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`, // JWT 토큰 예시
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
     });
 
-    if (response.status === 200) {
-      console.log("Group data received:", response.data);
-      return response.data;
-    } else {
-      console.error("Failed to fetch group data:", response.status);
+    if (groupResponse.status !== 200) {
+      console.error("Failed to fetch group data:", groupResponse.status);
       return null;
     }
+
+    const groups = groupResponse.data; // List of groups the user belongs to
+    console.log("Groups received:", groups);
+
+    const groupDetails = await Promise.all(
+      groups.map(async (group) => {
+        // Step 2: Fetch group members for each group
+        console.log(`Fetching members for group ID: ${group.id}`);
+
+        const memberResponse = await axios.get(`${serverUrl}/group/${group.id}`, {
+          withCredentials: true,
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
+
+        if (memberResponse.status !== 200) {
+          console.error(
+            `Failed to fetch members for group ID ${group.id}:`,
+            memberResponse.status
+          );
+          return { ...group, members: [] };
+        }
+
+        const groupData = memberResponse.data;
+        return { ...group, members: groupData.members };
+      })
+    );
+
+    console.log("Final group details:", groupDetails);
+    return groupDetails;
   } catch (error) {
     console.error("Error during API call:", error.message);
     return null;
   }
 };
 
-export default GetDataApi;
+export default GetGroupData;
