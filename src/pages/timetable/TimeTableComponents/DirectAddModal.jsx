@@ -2,10 +2,9 @@ import { useState, useEffect } from "react";
 import ShadowBox from "../../../components/ShadowBox";
 
 const days = ["월", "화", "수", "목", "금", "토", "일"];
-const timeOptions = Array.from({ length: 21 }, (_, i) => {
-  const hour = 9 + Math.floor(i / 2); // 09:00 ~ 19:00
-  const minutes = i % 2 === 0 ? "00" : "30";
-  return `${hour}:${minutes}`;
+const timeOptions = Array.from({ length: 11 }, (_, i) => {
+  const hour = 9 + i; // 09:00 ~ 19:00
+  return `${hour}:00`;
 });
 
 const convertTimeToMinutes = (time) => {
@@ -17,15 +16,14 @@ const DirectAddModal = ({ isOpen, onClose, onAddSubject }) => {
   const [name, setName] = useState("");
   const [day, setDay] = useState("월");
   const [startTime, setStartTime] = useState("09:00");
-  const [endTime, setEndTime] = useState("11:00");
+  const [endTime, setEndTime] = useState("10:00");
 
-  // 모달 열릴 때마다 상태 초기화
   useEffect(() => {
     if (isOpen) {
       setName("");
       setDay("월");
       setStartTime("09:00");
-      setEndTime("11:00");
+      setEndTime("10:00");
     }
   }, [isOpen]);
 
@@ -43,22 +41,17 @@ const DirectAddModal = ({ isOpen, onClose, onAddSubject }) => {
   };
 
   const handleSubmit = () => {
-    const dayIndex = days.indexOf(day) % days.length; // 요일 인덱스 보정
-    const adjustedDay = days[dayIndex];
-
     const newSubject = {
       name,
-      day: adjustedDay,
+      day,
       startTime: convertTimeToMinutes(startTime),
       endTime: convertTimeToMinutes(endTime),
-      color: generateRandomColor(), // 랜덤 색상 추가
+      color: generateRandomColor(),
     };
-
     onAddSubject(newSubject);
     onClose();
   };
 
-  // startTime 이후의 endTime 만 받도록 filtering
   const filteredEndTimeOptions = timeOptions.filter(
     (time) => convertTimeToMinutes(time) > convertTimeToMinutes(startTime)
   );
