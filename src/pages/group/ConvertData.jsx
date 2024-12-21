@@ -13,40 +13,33 @@ const ConvertToTestData = async () => {
       groups: {}
     };
 
-    groupData.forEach((group) => {
+    Object.entries(groupData.groups).forEach(([groupName, groupDetails]) => {
       // Initialize group members
-      testData.groups[group.name] = { members: [] };
+      testData.groups[groupName] = { members: groupDetails.members };
 
-      group.members.forEach((member) => {
-        // Add member to the group's member list
-        testData.groups[group.name].members.push(member.email);
-
+      groupDetails.members.forEach((member) => {
         // Initialize member in the timeTable
-        if (!testData.timeTable[member.email]) {
-          testData.timeTable[member.email] = {
+        if (!testData.timeTable[member]) {
+          testData.timeTable[member] = {
             "월": [], "화": [], "수": [], "목": [], "금": [], "토": [], "일": []
           };
         }
 
         // Add timetable data to the member
-        if (member.timetable && member.timetable.data) {
-          member.timetable.data.forEach((entry) => {
-            const { day, name, startTime, endTime } = entry;
-            const startHour = Math.floor(startTime / 60);
-            const endHour = Math.floor(endTime / 60);
+        const memberTimeTable = groupData.timeTable[member];
+        if (memberTimeTable) {
+          Object.entries(memberTimeTable).forEach(([day, entries]) => {
+            entries.forEach((entry) => {
+              const { name, start, end } = entry;
+              // Avoid duplicate entries for the same day and name
+              const existingEntry = testData.timeTable[member][day].find(
+                (e) => e.name === name && e.start === start && e.end === end
+              );
 
-            // Avoid duplicate entries for the same day and name
-            const existingEntry = testData.timeTable[member.email][day].find(
-              (e) => e.name === name && e.start === startHour && e.end === endHour
-            );
-
-            if (!existingEntry) {
-              testData.timeTable[member.email][day].push({
-                name,
-                start: startHour,
-                end: endHour
-              });
-            }
+              if (!existingEntry) {
+                testData.timeTable[member][day].push({ name, start, end });
+              }
+            });
           });
         }
       });
