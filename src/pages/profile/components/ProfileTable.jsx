@@ -1,25 +1,28 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { fetchTimetable } from "../../timetable/TimeTableGET";
 
-// 상수 데이터
-const DAYS = [
-  { id: "mon", label: "월" },
-  { id: "tue", label: "화" },
-  { id: "wed", label: "수" },
-  { id: "thu", label: "목" },
-  { id: "fri", label: "금" },
-  { id: "sat", label: "토" },
-  { id: "sun", label: "일" },
+const DAYS = ["월", "화", "수", "목", "금", "토", "일"];
+const TIME_SLOTS = [
+  "09:00 ~ 10:00",
+  "10:00 ~ 11:00",
+  "11:00 ~ 12:00",
+  "12:00 ~ 13:00",
+  "13:00 ~ 14:00",
+  "14:00 ~ 15:00",
+  "15:00 ~ 16:00",
+  "16:00 ~ 17:00",
+  "17:00 ~ 18:00",
+  "18:00 ~ 19:00",
 ];
 
-const TIME_SLOTS = Array.from({ length: 10 }, (_, i) => {
-  const hour = i + 9;
-  return `${hour}:00 ~ ${hour + 1}:00`;
-});
+const CELL_HEIGHT = 65; // 각 셀의 높이를 증가
+const HEADER_HEIGHT = 60; // 헤더의 높이를 증가
 
 const ProfileTable = () => {
   const [timetableData, setTimetableData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const timetableParent = useRef(null);
+  const [timetableParentWidth, setTimetableParentWidth] = useState(0);
 
   useEffect(() => {
     const getTimetableData = async () => {
@@ -40,27 +43,11 @@ const ProfileTable = () => {
     getTimetableData();
   }, []);
 
-  // 시간표 데이터를 시간과 요일에 맞게 찾는 함수
-  const findSubject = (day, timeSlot) => {
-    const [startHourStr] = timeSlot.split(":");
-    const startHour = parseInt(startHourStr);
-
-    // 점심시간(12:00-13:00)은 항상 비워둡니다
-    if (startHour === 12) {
-      return null;
+  useEffect(() => {
+    if (timetableParent.current) {
+      setTimetableParentWidth(timetableParent.current.offsetWidth);
     }
-
-    const startTime = startHour * 60; // 시작 시간을 분으로 변환
-
-    const subject = timetableData.find(
-      (subject) =>
-        subject.day === day.label &&
-        subject.startTime <= startTime + 60 &&
-        subject.endTime > startTime
-    );
-
-    return subject;
-  };
+  }, [timetableParent.current]);
 
   if (loading) {
     return (
@@ -82,41 +69,81 @@ const ProfileTable = () => {
           <div className="flex space-x-2"></div>
         </div>
 
-        <div className="overflow-auto h-[730px]">
-          <div className="grid grid-cols-[100px_repeat(7,1fr)]">
-            <div className="bg-gray-50 border p-2"></div>
-            {DAYS.map((day) => (
-              <div
-                key={day.id}
-                className="bg-gray-50 border p-2 text-center font-medium"
-              >
-                {day.label}
+        <div className="h-[750px]">
+          {" "}
+          {/* 전체 높이 조정 */}
+          <div
+            className="border border-gray-300 bg-white w-full h-full flex flex-col"
+            ref={timetableParent}
+          >
+            {/* 요일 헤더 */}
+            <div
+              className={`flex h-[${HEADER_HEIGHT}px] min-h-[${HEADER_HEIGHT}px]`}
+            >
+              <div className="flex flex-1 items-center justify-center border-r border-gray-300 text-black font-semibold bg-gray-100">
+                {""}
               </div>
-            ))}
-
-            {TIME_SLOTS.map((timeSlot) => (
-              <>
+              {DAYS.map((day) => (
                 <div
-                  key={`time-${timeSlot}`}
-                  className="bg-gray-50 border p-2 text-sm"
+                  key={day}
+                  className="flex flex-1 items-center justify-center border-r border-gray-300 text-black font-semibold bg-gray-100"
                 >
-                  {timeSlot}
+                  {day}
                 </div>
-                {DAYS.map((day) => {
-                  const subject = findSubject(day, timeSlot);
-                  return (
-                    <div
-                      key={`${day.id}-${timeSlot}`}
-                      className={`border p-2 text-center ${
-                        subject?.color || ""
-                      }`}
-                    >
-                      {subject?.name || "\u00A0"}
-                    </div>
-                  );
-                })}
-              </>
-            ))}
+              ))}
+            </div>
+
+            {/* 시간 레이블과 그리드 */}
+            <div className="relative flex-1">
+              {TIME_SLOTS.map((time) => (
+                <div
+                  key={time}
+                  className="absolute w-full border-b border-gray-300"
+                  style={{
+                    height: `${CELL_HEIGHT}px`,
+                    top: `${TIME_SLOTS.indexOf(time) * CELL_HEIGHT}px`,
+                  }}
+                >
+                  <div
+                    className="absolute left-0 h-full flex items-center justify-center text-sm"
+                    style={{
+                      width: timetableParentWidth / 8,
+                      borderRight: "1px solid #ccc",
+                      backgroundColor: "#f3f3f3",
+                    }}
+                  >
+                    {time}
+                  </div>
+                </div>
+              ))}
+
+              {/* 과목 데이터 */}
+              {timetableData.map((subject, index) => {
+                const startHour = Math.floor(subject.startTime / 60);
+                const startIndex = startHour - 9; // 9시가 시작 시간
+                const startTop = startIndex * CELL_HEIGHT;
+                const duration = (subject.endTime - subject.startTime) / 60;
+                const height = duration * CELL_HEIGHT;
+                const dayIndex = DAYS.indexOf(subject.day);
+
+                if (dayIndex === -1) return null;
+
+                return (
+                  <div
+                    key={index}
+                    className={`absolute text-black text-sm flex justify-center items-center ${subject.color}`}
+                    style={{
+                      top: `${startTop}px`,
+                      left: `${(timetableParentWidth / 8) * (dayIndex + 1)}px`,
+                      height: `${height}px`,
+                      width: `${timetableParentWidth / 8}px`,
+                    }}
+                  >
+                    {subject.name}
+                  </div>
+                );
+              })}
+            </div>
           </div>
         </div>
       </div>
