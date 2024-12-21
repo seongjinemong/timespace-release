@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { useEffect } from "react";
 import { getUserInfo } from "../api/userApi";
 import { useAuthStore } from "../store/authStore";
-import {handleLogout} from "../hooks/useLogout";
+import { handleLogout } from "../hooks/useLogout";
 
 const Navigation = () => {
   const { isLoggedIn, userName, setCredentials } = useAuthStore();
@@ -24,7 +24,6 @@ const Navigation = () => {
     fetchUserInfo();
   }, [isLoggedIn, setCredentials]);
 
-
   return (
     <div className="w-full">
       <nav className="w-full px-6 py-4 flex justify-between items-center">
@@ -45,7 +44,7 @@ const Navigation = () => {
                 내 시간표 수정
               </Link>
               <Link
-                to="/profile"
+                to="/mypage"
                 className="text-sm text-seagull-900 font-medium hover:opacity-80"
               >
                 마이페이지

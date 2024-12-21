@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import { fetchTimetable } from "../../timetable/TimeTableGET";
 
 // 상수 데이터
 const DAYS = [
@@ -18,28 +18,49 @@ const TIME_SLOTS = Array.from({ length: 10 }, (_, i) => {
 });
 
 const ProfileTable = () => {
-  const [timetableData, setTimetableData] = useState(null);
+  const [timetableData, setTimetableData] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const fetchTimetableData = async () => {
-    try {
-      setLoading(true);
-      const response = await axios.get(
-        `${import.meta.env.VITE_SERVER_URL}/timetable`,
-        { withCredentials: true }
-      );
-      setTimetableData(response.data?.data || {});
-    } catch (error) {
-      console.error("시간표 조회 에러:", error);
-      setTimetableData({});
-    } finally {
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
-    fetchTimetableData();
+    const getTimetableData = async () => {
+      try {
+        setLoading(true);
+        const data = await fetchTimetable();
+        if (data) {
+          setTimetableData(data);
+        }
+      } catch (error) {
+        console.error("시간표 조회 에러:", error);
+        setTimetableData([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    getTimetableData();
   }, []);
+
+  // 시간표 데이터를 시간과 요일에 맞게 찾는 함수
+  const findSubject = (day, timeSlot) => {
+    const [startHourStr] = timeSlot.split(":");
+    const startHour = parseInt(startHourStr);
+
+    // 점심시간(12:00-13:00)은 항상 비워둡니다
+    if (startHour === 12) {
+      return null;
+    }
+
+    const startTime = startHour * 60; // 시작 시간을 분으로 변환
+
+    const subject = timetableData.find(
+      (subject) =>
+        subject.day === day.label &&
+        subject.startTime <= startTime + 60 &&
+        subject.endTime > startTime
+    );
+
+    return subject;
+  };
 
   if (loading) {
     return (
@@ -61,10 +82,8 @@ const ProfileTable = () => {
           <div className="flex space-x-2"></div>
         </div>
 
-        {/* 시간표 그리드 컨테이너 */}
         <div className="overflow-auto h-[730px]">
           <div className="grid grid-cols-[100px_repeat(7,1fr)]">
-            {/* 헤더 행 */}
             <div className="bg-gray-50 border p-2"></div>
             {DAYS.map((day) => (
               <div
@@ -75,26 +94,27 @@ const ProfileTable = () => {
               </div>
             ))}
 
-            {/* 시간대별 행 */}
-            {TIME_SLOTS.map((time) => (
-              // 각 시간대 행
+            {TIME_SLOTS.map((timeSlot) => (
               <>
-                {/* 시간 셀 */}
                 <div
-                  key={`time-${time}`}
+                  key={`time-${timeSlot}`}
                   className="bg-gray-50 border p-2 text-sm"
                 >
-                  {time}
+                  {timeSlot}
                 </div>
-                {/* 각 요일 셀 */}
-                {DAYS.map((day) => (
-                  <div
-                    key={`${day.id}-${time}`}
-                    className="border p-2 text-center"
-                  >
-                    {timetableData?.[`${day.id}-${time}`] || "\u00A0"}
-                  </div>
-                ))}
+                {DAYS.map((day) => {
+                  const subject = findSubject(day, timeSlot);
+                  return (
+                    <div
+                      key={`${day.id}-${timeSlot}`}
+                      className={`border p-2 text-center ${
+                        subject?.color || ""
+                      }`}
+                    >
+                      {subject?.name || "\u00A0"}
+                    </div>
+                  );
+                })}
               </>
             ))}
           </div>
